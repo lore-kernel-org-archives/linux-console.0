@@ -1,54 +1,30 @@
-From: Jan-Benedict Glaw <jbglaw@lug-owl.de>
-Subject: Re: feeding a script from standard input
-Date: Fri, 30 Jan 2004 16:30:08 +0100
+From: Jeffrey Holle <jeff.holle@verizon.net>
+Subject: using grep with both -l and -n
+Date: Thu, 19 Feb 2004 16:00:07 -0800
 Sender: linux-console-owner@vger.kernel.org
-Message-ID: <20040130153008.GY20536@lug-owl.de>
-References: <bv4v6h$rlc$1@sea.gmane.org> <20040128140536.GW8401@lug-owl.de> <bv96ha$88v$1@sea.gmane.org> <20040129073016.GA370@thune.mrc-home.com>
+Message-ID: <c13irp$6lf$1@sea.gmane.org>
+Reply-To: jeff.holle@verizon.net
 Mime-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-	protocol="application/pgp-signature"; boundary="ELMKpCVvjiB+uwRu"
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-console-owner@vger.kernel.org>
-Content-Disposition: inline
-In-Reply-To: <20040129073016.GA370@thune.mrc-home.com>
 List-Id: <linux-console.vger.kernel.org>
+Content-Type: text/plain; charset="us-ascii"; format="flowed"
 To: linux-console@vger.kernel.org
 
+I've actually got two questions about grep.
 
---ELMKpCVvjiB+uwRu
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+First, can the -l, which just prints the matching filenames, and -n, 
+which includes the matched line number using the syntax 
+"filename:lineno", be combined to affect.
 
-On Wed, 2004-01-28 23:30:16 -0800, Mike Castle <dalgoda@ix.netcom.com>
-wrote in message <20040129073016.GA370@thune.mrc-home.com>:
-> On Wed, Jan 28, 2004 at 12:34:17PM -0800, Jeffrey Holle wrote:
-> > Thanks for this, works without the quotes!
->=20
-> Better to use "$@".
+What I find is that adding -n makes inclusion of -l a noop.
 
-That was actually ment - sorry for confusion.
+The reason I ask is I'm using grep to generate .gdbinit files.  the 
+syntax that -n emits is right on, except for the extra stuff that is 
+normally suppressed by -l.
 
-MfG, JBG
+The second question is there a way to defeat the default behavior of not 
+including the filename when -n is used and only one file is included in 
+the search?  In this case, it prints just the lineno.
 
---=20
-   Jan-Benedict Glaw       jbglaw@lug-owl.de    . +49-172-7608481
-   "Eine Freie Meinung in  einem Freien Kopf    | Gegen Zensur | Gegen Krieg
-    fuer einen Freien Staat voll Freier B=FCrger" | im Internet! |   im Ira=
-k!
-   ret =3D do_actions((curr | FREE_SPEECH) & ~(NEW_COPYRIGHT_LAW | DRM | TC=
-PA));
 
---ELMKpCVvjiB+uwRu
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
-Content-Disposition: inline
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.2.3 (GNU/Linux)
-
-iD8DBQFAGniAHb1edYOZ4bsRAgh8AKCJMgY18G3R64IlCr9Nw0Wl3di8igCdGTE2
-WaqW4YRD40EA06qOhgSSu6c=
-=VsF2
------END PGP SIGNATURE-----
-
---ELMKpCVvjiB+uwRu--
