@@ -1,63 +1,39 @@
-From: Jan-Benedict Glaw <jbglaw@lug-owl.de>
-Subject: Re: Welcome to linux-console
-Date: Mon, 8 Dec 2003 12:19:39 +0100
+From: "Dhananjai M. Rao" <dmadhava@djrao.com>
+Subject: Concurrent multiple virtual Consoles using 2 video cards + 2 monitors
+Date: Mon, 22 Dec 2003 10:16:31 -0500 (EST)
 Sender: linux-console-owner@vger.kernel.org
-Message-ID: <20031208111938.GO16507@lug-owl.de>
-References: <33A3630DF4936D44BDDC234FBDD2182387183A@mail.sonata-software.com>
+Message-ID: <Pine.LNX.4.33.0312221016040.1329-100000@dragon.CyberneticEvolution.com>
 Mime-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-	protocol="application/pgp-signature"; boundary="NqiZnzhFL7JHQOqO"
 Return-path: <linux-console-owner@vger.kernel.org>
-Content-Disposition: inline
-In-Reply-To: <33A3630DF4936D44BDDC234FBDD2182387183A@mail.sonata-software.com>
 List-Id: <linux-console.vger.kernel.org>
+Content-Type: TEXT/PLAIN; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 To: linux-console@vger.kernel.org
 
+Hello,
 
---NqiZnzhFL7JHQOqO
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I am trying to figure out how to configure 2 concurrently active virtual
+consoles (just text-based ones and not using X with xinearama extensions
+etc.) on the Linux kernel.
 
-On Mon, 2003-12-08 12:27:43 +0530, Kamal Kumar <kamal.k@sonata-software.com>
-wrote in message <33A3630DF4936D44BDDC234FBDD2182387183A@mail.sonata-softwa=
-re.com>:
-> 	Hi,
-> 	I want to know about  the command for locking the computer from the
-> command prompt.
-> 	also pls. tell me how to start the kde from the command .
+I am trying to do this on a Athlon/XP machine running Linux kernel 2.4.20
+(distributed with Red Hat 9.0 stock) and I have 1 AGP video card (nVidia
+GeForce) and 1 PCI video card (S3ViRGE) and 2 monitors connected to the
+two video cards.  When the machine boots up (into runlevel 3), only one
+monitor (the PCI video card) is active and the other monitor is not used.
+[However, when I start-up X (with suitable configuration), both monitors
+work fine]
 
-Simply log off.
+I would like to have 2 concurrent virtual consoles running on the two
+monitors simultaneously.  How do I setup virtual consoles to achieve this?
+I am guessing if I can get two virtual consoles working simultaneously?
 
-> Disclaimer: The information in this e-mail and any attachments is
-> confidential / privileged. It is intended solely for the addressee or
-> addressees. If you are not the addressee indicated in this message, you m=
-ay
+Any tips, suggestions, or pointers to other resources are welcome.
 
-I'm obviously not exactly the mentioned addressee, so secure your email
-system. Thanks.
+thanks in advance for your time and patience for responding to this
+request.
 
-MfG, JBG
+with regards and seasons greetings
+-DJ
 
---=20
-   Jan-Benedict Glaw       jbglaw@lug-owl.de    . +49-172-7608481
-   "Eine Freie Meinung in  einem Freien Kopf    | Gegen Zensur | Gegen Krieg
-    fuer einen Freien Staat voll Freier B=FCrger" | im Internet! |   im Ira=
-k!
-   ret =3D do_actions((curr | FREE_SPEECH) & ~(NEW_COPYRIGHT_LAW | DRM | TC=
-PA));
 
---NqiZnzhFL7JHQOqO
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
-Content-Disposition: inline
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.2.3 (GNU/Linux)
-
-iD8DBQE/1F5KHb1edYOZ4bsRAnrTAJ9Bbrx2wjxZZnuMWOghGJ1XwKY58ACdGQwO
-Q8U0O8cAQYKgNOHPvBjFDXc=
-=MMAf
------END PGP SIGNATURE-----
-
---NqiZnzhFL7JHQOqO--
