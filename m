@@ -1,50 +1,28 @@
-From: Jeffrey Holle <jeff.holle@verizon.net>
+From: BobGian@U.Washington.edu
 Subject: Re: encapulating a find function in a script
-Date: Wed, 14 Jan 2004 17:55:41 -0800
+Date: Fri, 16 Jan 2004 11:53:49 -0800
 Sender: linux-console-owner@vger.kernel.org
-Message-ID: <bu4s3j$atl$1@sea.gmane.org>
-References: <200401150034.i0F0Y1x17029@trumpet.radonc.washington.edu>
-Reply-To: jeff.holle@verizon.net
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Message-ID: <200401161953.i0GJrnb28511@trumpet.radonc.washington.edu>
+Reply-To: BobGian@U.Washington.edu
 Return-path: <linux-console-owner@vger.kernel.org>
-In-Reply-To: <200401150034.i0F0Y1x17029@trumpet.radonc.washington.edu>
 List-Id: <linux-console.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"; format="flowed"
-To: linux-console@vger.kernel.org
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+To: dalgoda@ix.netcom.com
+Cc: linux-console@vger.kernel.org, jeff.holle@verizon.net
 
-No joy.
-The problem appears to be the '*' character.
-If I substitute an actual cpp filename, the script works.  However it 
-not very useful this way.
+> You may also find that using xargs instead of -exec is much faster
+> (fewer fork/execs).
+>
+> Something like:
+>
+> find "$1" -name "$2" -print0 | xargs -0 grep -H "$3"
+>
+> mrc
+> --
 
-BobGian@U.Washington.edu wrote:
->>I'm having a problem with a simple script I'm trying to develop.
->>
->>Its name is fgrep and its text is:
->>
->>        #!/bin/bash
->>        find $1 -name $2 -exec grep -H $3 '{}' ';'
->>
->>I want to use it like "dgrep 'directory' 'file pattern' 'match text'.
->>
->>It doesn't match anything because of the $2 parameter.  If I replace
->>"$2" with "*.cpp", it works.
->>
->>Can anybody tell me what is wrong and how to fix it?
-> 
-> 
-> Try putting double-quotes around the parameters, like:
-> 
-> 	 find $1 -name "$2" -exec grep -H "$3" '{}' ';'
-> 
-> This works for me in a similar script, at least in the csh shell.
-> 
->  -Bob Giansiracusa
-> -
-> To unsubscribe from this list: send the line "unsubscribe linux-console" in
-> the body of a message to majordomo@vger.kernel.org
-> More majordomo info at  http://vger.kernel.org/majordomo-info.html
-> 
+Thanks!  Tried it - works great.  Runs two or three times as fast
+and with half as many page faults.
 
-
+ -Bob
