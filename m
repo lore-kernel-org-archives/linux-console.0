@@ -1,45 +1,54 @@
-From: =?ISO-8859-1?Q?S=E9bastien_Lefebvre?= <sebastien.lefebvre@free.fr>
-Subject: Software switch from /dev/tty1 to /dev/tty2
-Date: Mon, 23 Feb 2004 09:56:03 +0100
+From: Jan-Benedict Glaw <jbglaw@lug-owl.de>
+Subject: Re: Software switch from /dev/tty1 to /dev/tty2
+Date: Mon, 23 Feb 2004 15:26:55 +0100
 Sender: linux-console-owner@vger.kernel.org
-Message-ID: <c1cf73$db4$1@sea.gmane.org>
+Message-ID: <20040223142654.GK13827@lug-owl.de>
+References: <c1cf73$db4$1@sea.gmane.org>
 Mime-Version: 1.0
-Content-Transfer-Encoding: QUOTED-PRINTABLE
+Content-Type: multipart/signed; micalg=pgp-sha1;
+	protocol="application/pgp-signature"; boundary="IB2Qao3B4XdnqHmg"
 Return-path: <linux-console-owner@vger.kernel.org>
+Content-Disposition: inline
+In-Reply-To: <c1cf73$db4$1@sea.gmane.org>
 List-Id: <linux-console.vger.kernel.org>
-Content-Type: text/plain; charset="iso-8859-1"; format="flowed"
 To: linux-console@vger.kernel.org
 
-Hi !
 
-Does anyone know how to switch from /dev/tty1 to /dev/tty2 with Bash ?
-Here is my setup, this could give you other ideas for alternative=20
-solutions :
+--IB2Qao3B4XdnqHmg
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+On Mon, 2004-02-23 09:56:03 +0100, S=E9bastien Lefebvre <sebastien.lefebvre=
+@free.fr>
+wrote in message <c1cf73$db4$1@sea.gmane.org>:
+> Hi !
+>=20
+> Does anyone know how to switch from /dev/tty1 to /dev/tty2 with Bash ?
 
-I boot using a full screen framebuffer on /dev/tty1
-The "active" console is /dev/tty2 (which receives the boot logs).
-Then, using /etc/init.d, I launch a script (as I defined CONSOLE and=20
-console to /dev/tty1 in lilo.conf, every output is still displayed on=20
-/dev/tty2).
+$ man chvt
 
-Then, I could either :
+MfG, JBG
 
--Display a message on /dev/tty1 (this requires to clear the framebuffer=
-,=20
-how to do that ?)
+--=20
+   Jan-Benedict Glaw       jbglaw@lug-owl.de    . +49-172-7608481
+   "Eine Freie Meinung in  einem Freien Kopf    | Gegen Zensur | Gegen Krieg
+    fuer einen Freien Staat voll Freier B=FCrger" | im Internet! |   im Ira=
+k!
+   ret =3D do_actions((curr | FREE_SPEECH) & ~(NEW_COPYRIGHT_LAW | DRM | TC=
+PA));
 
-or
+--IB2Qao3B4XdnqHmg
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Digital signature
+Content-Disposition: inline
 
--switch to console /dev/tty1 within my script.
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.2.4 (GNU/Linux)
 
-Thanks  a lot for any idea,
+iD8DBQFAOg2uHb1edYOZ4bsRArKgAJ4klDLULzBLJBhB5974+LTNE4X22QCfd27N
+T+qJGASpIj9SaWc/BT9F0uE=
+=Xh0w
+-----END PGP SIGNATURE-----
 
-S=E9bastien
-
-
--
-To unsubscribe from this list: send the line "unsubscribe linux-console=
-" in
-the body of a message to majordomo@vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
+--IB2Qao3B4XdnqHmg--
