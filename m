@@ -1,29 +1,39 @@
-From: Matti Aarnio <matti.aarnio@zmailer.org>,
-	Matti Aarnio <matti.aarnio@zmailer.org>
-Subject: Archive hunt for vger's lists ...  (and FAQs too!)
-Date: Wed, 21 Aug 2002 12:34:08 +0300
+From: Kai-Boris Schad <kschad@ebs.e-technik.uni-ulm.de>
+Subject: Q: Howto access the keyboard in a linux system without a graphics card ?
+Date: Mon, 26 Aug 2002 11:43:14 +0200
 Sender: linux-console-owner@vger.kernel.org
-Message-ID: <29143.3496553966$1029922386@news.gmane.org>
-Reply-To: webmaster@vger.kernel.org
+Message-ID: <200208260943.LAA25845@correo.e-technik.uni-ulm.de>
+Reply-To: kschad@ebs.e-technik.uni-ulm.de
 Mime-Version: 1.0
+Content-Transfer-Encoding: 7BIT
 Return-path: <linux-console-owner@vger.kernel.org>
-Content-Disposition: inline
 List-Id: <linux-console.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-To: linux-bbs@vger.kernel.org, linux-config@vger.kernel.org
-Cc: linux-console@vger.kernel.org, linux-c-programming@vger.kernel.org, linux-diald@vger.kernel.org, linux-doc@vger.kernel.org
+To: linux-console@vger.kernel.org, linux-kernel@vger.kernel.org
 
-At vger's web we have:
-  http://vger.kernel.org/vger-lists.html
+Hi !
 
-which has all lists at vger, and links to all list archives that
-I found last week (at google/marc) when I did a full review of those.
+I'm trying to set up a small embedded system for gps receiving with a linux 
+system.  I want to have the system working without a graphics card - wich 
+works well. The Problem I have at the moment is to access the keyboard 
+without a graphics card, because the console driver does not start then ( 
+Also a redirect doesn't work then :-( ) 
+Is there a way to access the keyboard in this case by a user program ?
+The system recognises the keyboard ( I think Kernel and init) and reacts if 
+ctrl-alt-del is pressed.
 
-If you know any archive that should be listed there, please tell
-vger's webmaster.  (NOT the lists!)
+Thanks for your help !
 
-Also, if any list has a FAQ, we would like to know about it too!
-My plan is to add archive and FAQ pointters to all list footers
-(in style similar to linux-kernel).
+Kai
 
+-- 
+Kai-Boris Schad 
+University of Ulm, Germany
+Dept. of Electron Devices and Circuits
+Integrated Circuits in Communications
+Albert Einstein Allee 45
+89069 ULM
+
+http://www.uni-ulm.de/icic
+email:kschad@ebs.e-technik.uni-ulm.de
+phone +49/731/50-31581  fax +49/731/50-31599
