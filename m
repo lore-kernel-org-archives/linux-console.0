@@ -1,33 +1,45 @@
-From: Eric Lammerts <eric@lammerts.org>
-Subject: Re: Q: Howto access the keyboard in a linux system without a graphics
- card ?
-Date: Mon, 26 Aug 2002 22:34:08 +0200 (CEST)
+From: Samuel Thibault <Samuel.Thibault@ens-lyon.fr>
+Subject: Braille devices can't scrollback console
+Date: Thu, 27 Mar 2003 11:30:53 +0100
 Sender: linux-console-owner@vger.kernel.org
-Message-ID: <49196.7170419686$1030394565@news.gmane.org>
-References: <200208260943.LAA25845@correo.e-technik.uni-ulm.de>
+Message-ID: <20030327103053.GA974@bouh.residence.ens-lyon.fr>
+Reply-To: Samuel Thibault <samuel.thibault@fnac.net>
 Mime-Version: 1.0
 Return-path: <linux-console-owner@vger.kernel.org>
-In-Reply-To: <200208260943.LAA25845@correo.e-technik.uni-ulm.de>
+Content-Disposition: inline
 List-Id: <linux-console.vger.kernel.org>
-Content-Type: TEXT/PLAIN; charset="us-ascii"
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-To: Kai-Boris Schad <kschad@ebs.e-technik.uni-ulm.de>
-Cc: linux-console@vger.kernel.org, linux-kernel@vger.kernel.org
+To: linux-console@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org, dave@mielke.cc, shindere@ens-lyon.fr
 
+Hello,
 
-On Mon, 26 Aug 2002, Kai-Boris Schad wrote:
-> I'm trying to set up a small embedded system for gps receiving with a linux
-> system.  I want to have the system working without a graphics card - wich
-> works well. The Problem I have at the moment is to access the keyboard
-> without a graphics card, because the console driver does not start then (
-> Also a redirect doesn't work then :-( )
-> Is there a way to access the keyboard in this case by a user program ?
-> The system recognises the keyboard ( I think Kernel and init) and reacts if
-> ctrl-alt-del is pressed.
+There is no way for a braille device driven by brltty (userland root-owned
+daemon) to scrollback the virtual console, the only way is to use the pc
+keyboard. A very simple TIOCLINUX ioctl meets this need (tested):
 
-What would probably work, is to add funkey support to your kernel
-(http://rick.vanrein.org/linux/funkey/), define all keys of your
-keyboard to be funkeys, and read them from /dev/funkey.
+diff -urN linux/drivers/char/console.c linux-scrollioctl/drivers/char/console.c
+--- linux/drivers/char/console.c	2003-03-27 10:55:43.000000000 +0100
++++ linux-scrollioctl/drivers/char/console.c	2003-03-27 11:04:31.000000000 +0100
+@@ -2262,6 +2262,17 @@
+ 		case 12:	/* get fg_console */
+ 			ret = fg_console;
+ 			break;
++		case 13:	/* scroll console */
++			{
++				int lines;
++				if (get_user(lines, (char *)arg+1)) {
++					ret = -EFAULT;
++				} else {
++					scrollfront(lines);
++					ret = 0;
++				}
++			}
++			break;
+ 		default:
+ 			ret = -EINVAL;
+ 			break;
 
-Eric
-
+Regards,
+Samuel Thibault
