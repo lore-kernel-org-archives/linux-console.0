@@ -1,45 +1,29 @@
-From: Samuel Thibault <Samuel.Thibault@ens-lyon.fr>
-Subject: Braille devices can't scrollback console
-Date: Thu, 27 Mar 2003 11:30:53 +0100
+From: Kamal Kumar <kamal.k@sonata-software.com>
+Subject: RE: Welcome to linux-console
+Date: Mon, 8 Dec 2003 12:27:43 +0530
 Sender: linux-console-owner@vger.kernel.org
-Message-ID: <20030327103053.GA974@bouh.residence.ens-lyon.fr>
-Reply-To: Samuel Thibault <samuel.thibault@fnac.net>
+Message-ID: <33A3630DF4936D44BDDC234FBDD2182387183A@mail.sonata-software.com>
 Mime-Version: 1.0
 Return-path: <linux-console-owner@vger.kernel.org>
-Content-Disposition: inline
 List-Id: <linux-console.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: linux-console@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org, dave@mielke.cc, shindere@ens-lyon.fr
+Cc: owner-linux-console@vger.kernel.org
 
-Hello,
+	Hi,
+	I want to know about  the command for locking the computer from the
+command prompt.
+	also pls. tell me how to start the kde from the command .
 
-There is no way for a braille device driven by brltty (userland root-owned
-daemon) to scrollback the virtual console, the only way is to use the pc
-keyboard. A very simple TIOCLINUX ioctl meets this need (tested):
-
-diff -urN linux/drivers/char/console.c linux-scrollioctl/drivers/char/console.c
---- linux/drivers/char/console.c	2003-03-27 10:55:43.000000000 +0100
-+++ linux-scrollioctl/drivers/char/console.c	2003-03-27 11:04:31.000000000 +0100
-@@ -2262,6 +2262,17 @@
- 		case 12:	/* get fg_console */
- 			ret = fg_console;
- 			break;
-+		case 13:	/* scroll console */
-+			{
-+				int lines;
-+				if (get_user(lines, (char *)arg+1)) {
-+					ret = -EFAULT;
-+				} else {
-+					scrollfront(lines);
-+					ret = 0;
-+				}
-+			}
-+			break;
- 		default:
- 			ret = -EINVAL;
- 			break;
-
-Regards,
-Samuel Thibault
+	Thx,
+	Kamal 
+*********************************************************************
+Disclaimer: The information in this e-mail and any attachments is
+confidential / privileged. It is intended solely for the addressee or
+addressees. If you are not the addressee indicated in this message, you may
+not copy or deliver this message to anyone. In such case, you should destroy
+this message and kindly notify the sender by reply email. Please advise
+immediately if you or your employer does not consent to Internet email for
+messages of this kind.
+*********************************************************************
