@@ -1,36 +1,45 @@
-From: Mike Castle <dalgoda@ix.netcom.com>
-Subject: Re: using grep with both -l and -n
-Date: Thu, 19 Feb 2004 19:04:50 -0800
+From: =?ISO-8859-1?Q?S=E9bastien_Lefebvre?= <sebastien.lefebvre@free.fr>
+Subject: Software switch from /dev/tty1 to /dev/tty2
+Date: Mon, 23 Feb 2004 09:56:03 +0100
 Sender: linux-console-owner@vger.kernel.org
-Message-ID: <20040220030450.GI345@thune.mrc-home.com>
-References: <c13irp$6lf$1@sea.gmane.org>
-Reply-To: Mike Castle <dalgoda@ix.netcom.com>
+Message-ID: <c1cf73$db4$1@sea.gmane.org>
 Mime-Version: 1.0
+Content-Transfer-Encoding: QUOTED-PRINTABLE
 Return-path: <linux-console-owner@vger.kernel.org>
-Content-Disposition: inline
-In-Reply-To: <c13irp$6lf$1@sea.gmane.org>
 List-Id: <linux-console.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-To: Jeffrey Holle <jeff.holle@verizon.net>
-Cc: linux-console@vger.kernel.org
+Content-Type: text/plain; charset="iso-8859-1"; format="flowed"
+To: linux-console@vger.kernel.org
 
-On Thu, Feb 19, 2004 at 04:00:07PM -0800, Jeffrey Holle wrote:
-> The reason I ask is I'm using grep to generate .gdbinit files.  the 
-> syntax that -n emits is right on, except for the extra stuff that is 
-> normally suppressed by -l.
+Hi !
 
-Would this work for you:
-awk '{print $1}'
+Does anyone know how to switch from /dev/tty1 to /dev/tty2 with Bash ?
+Here is my setup, this could give you other ideas for alternative=20
+solutions :
 
-> The second question is there a way to defeat the default behavior of not 
-> including the filename when -n is used and only one file is included in 
-> the search?  In this case, it prints just the lineno.
 
-Add /dev/null to the list of files.
+I boot using a full screen framebuffer on /dev/tty1
+The "active" console is /dev/tty2 (which receives the boot logs).
+Then, using /etc/init.d, I launch a script (as I defined CONSOLE and=20
+console to /dev/tty1 in lilo.conf, every output is still displayed on=20
+/dev/tty2).
 
-mrc
--- 
-     Mike Castle      dalgoda@ix.netcom.com      www.netcom.com/~dalgoda/
-    We are all of us living in the shadow of Manhattan.  -- Watchmen
-fatal ("You are in a maze of twisty compiler features, all different"); -- gcc
+Then, I could either :
+
+-Display a message on /dev/tty1 (this requires to clear the framebuffer=
+,=20
+how to do that ?)
+
+or
+
+-switch to console /dev/tty1 within my script.
+
+Thanks  a lot for any idea,
+
+S=E9bastien
+
+
+-
+To unsubscribe from this list: send the line "unsubscribe linux-console=
+" in
+the body of a message to majordomo@vger.kernel.org
+More majordomo info at  http://vger.kernel.org/majordomo-info.html
