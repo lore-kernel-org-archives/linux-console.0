@@ -1,7 +1,7 @@
 From: Kaushal Shriyan <kaushalshriyan@gmail.com>
-Subject: CTRL-ALT-F1
-Date: Mon, 23 Jan 2006 16:46:45 +0530
-Message-ID: <6b16fb4c0601230316i1291266bt2cd8fe68d3f6c798@mail.gmail.com>
+Subject: CTRL-ALT-F1 on Linux
+Date: Mon, 23 Jan 2006 17:27:02 +0530
+Message-ID: <6b16fb4c0601230357i49853f29pe803d95c1143b852@mail.gmail.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Return-path: <linux-console-owner@vger.kernel.org>
@@ -21,3 +21,5 @@ How is it done
 Thanks in advance
 
 Regards
+
+Kaushal
