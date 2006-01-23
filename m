@@ -1,37 +1,23 @@
-From: <cutaway@bellsouth.net>
-Subject: QUESTION:  kernel/drivers/char/console_macros.h
-Date: Tue, 17 May 2005 06:00:11 -0400
-Message-ID: <000b01c55ac7$3a1e8e80$2800000a@pc365dualp2>
+From: Kaushal Shriyan <kaushalshriyan@gmail.com>
+Subject: CTRL-ALT-F1
+Date: Mon, 23 Jan 2006 16:46:45 +0530
+Message-ID: <6b16fb4c0601230316i1291266bt2cd8fe68d3f6c798@mail.gmail.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 7BIT
 Return-path: <linux-console-owner@vger.kernel.org>
+Content-Disposition: inline
 Sender: linux-console-owner@vger.kernel.org
 List-Id: <linux-console.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
 To: linux-console@vger.kernel.org
 
-#define vc_state ....
+Hi All
 
-This particular macro happens to be the SAME NAME as the vconsole data
-structure member it references.
+I want to set the buffer size in the CTRL-ALT-F1 to F6 text console to
+1000 lines so that I can view all my code in the screen at a time
 
-This seems quite unhandy if you try to reference the vc_state member using a
-pointer to a vconsole data structure like so:
+How is it done
 
-struct vc_data *vcdp = vc_cons[currcons].d;
+Thanks in advance
 
-vcdp->vc_state = whatever...;
-
-The macro will expand (because of course it has the same name and the
-preprocessor doesn't know the difference) when what you really wanted was
-the structure member.  Cryptic syntax errors result.
-
-So... HERE IS THE QUESTION: was there some compelling reason this particular
-macro should be this way, (rather than #define state ...) or was it just
-some ages old typo that was never noticed?
-
-Of course, if all you use is the macros to reference vconsole data, the
-issue never surfaces - but the resultant code quality suffers when some
-function has several macros in it that could benefit from caching a pointer
-to the current vcon structure and using that.
-
+Regards
