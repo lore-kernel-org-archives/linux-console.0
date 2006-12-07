@@ -1,27 +1,25 @@
-From: "Jesper Juhl" <jesper.juhl@gmail.com>
-Subject: Re: VGER.KERNEL.ORG
-Date: Fri, 11 Aug 2006 15:15:10 +0200
-Message-ID: <9a8748490608110615h1835af8dq80e3c5d89cff0a74@mail.gmail.com>
-References: <6b16fb4c0608102206i1a59e8b8q1fc9bae59a09c77c@mail.gmail.com>
+From: "Karthik Gopalakrishnan" <karthik.g.krishnan@gmail.com>
+Subject: MCA in console_init()
+Date: Fri, 8 Dec 2006 03:17:00 +0530
+Message-ID: <5e0a1fd80612071347u54f8e8d7lb53f5e933fb9e966@mail.gmail.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-console-owner@vger.kernel.org>
-In-Reply-To: <6b16fb4c0608102206i1a59e8b8q1fc9bae59a09c77c@mail.gmail.com>
 Content-Disposition: inline
 Sender: linux-console-owner@vger.kernel.org
 List-Id: <linux-console.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"; format="flowed"
-To: Kaushal Shriyan <kaushalshriyan@gmail.com>
-Cc: kernelnewbies@nl.linux.org, linux-console@vger.kernel.org
+To: linux-console@vger.kernel.org
 
-On 11/08/06, Kaushal Shriyan <kaushalshriyan@gmail.com> wrote:
-> Hi ALL
->
-> Just wanted to know what exactly is VGER in VGER.KERNEL.ORG
->
-http://en.wikipedia.org/wiki/V'ger
+Hi Folks.
 
--- 
-Jesper Juhl <jesper.juhl@gmail.com>
-Don't top-post  http://www.catb.org/~esr/jargon/html/T/top-post.html
-Plain text mails only, please      http://www.expita.com/nomime.html
+    I am trying to debug an MCA that I hit during kernel bootup. I
+have isolated the problem to the while loop in the console_init()
+routine called as part of start_kernel(). The IIP obtained from the
+MCA Logs point to vgacon_startup(). I will be grateful if someone
+could tell me how execution lands up in vgacon_startup() from
+console_init() since I quite understand that part of code. Probably, a
+pointer to a suitable document will also do.
+
+Thanks & Regards,
+Karthik
