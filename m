@@ -1,33 +1,37 @@
-From: Alan Cox <alan@lxorguk.ukuu.org.uk>
+From: Samuel Thibault <samuel.thibault@ens-lyon.org>
 Subject: Re: inotify on /dev/vcsa?
-Date: Tue, 21 Jul 2009 00:51:08 +0100
-Message-ID: <20090721005108.574d5145@lxorguk.ukuu.org.uk>
-References: <20090720234618.GR5397@const.famille.thibault.fr>
+Date: Tue, 21 Jul 2009 01:55:14 +0200
+Message-ID: <20090720235514.GT5397@const.famille.thibault.fr>
+References: <20090720234618.GR5397@const.famille.thibault.fr> <20090721005108.574d5145@lxorguk.ukuu.org.uk>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: QUOTED-PRINTABLE
 Return-path: <linux-console-owner@vger.kernel.org>
-In-Reply-To: <20090720234618.GR5397@const.famille.thibault.fr>
+Content-Disposition: inline
+In-Reply-To: <20090721005108.574d5145@lxorguk.ukuu.org.uk>
 Sender: linux-console-owner@vger.kernel.org
 List-ID: <linux-console.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: Samuel Thibault <samuel.thibault@ens-lyon.org>
+Content-Type: text/plain; charset="iso-8859-1"
+To: Alan Cox <alan@lxorguk.ukuu.org.uk>
 Cc: linux-kernel@vger.kernel.org, linux-console@vger.kernel.org
 
-> An ioctl could be devised to wait for updates, but I was wondering
-> if there could be a way to just use inotify for that.  However,
-> drivers/char/vc_screen.c would have to collect the list of opened files
-> in order to notify all of them (processes may even have opened another
-> node with same devno as /dev/vcsa), which is not really pretty, and
-> actually maybe some other device drivers would want to achieve the same
-> kind of thing, so I was wondering whether that could fit into another
-> place like the generic device infrastructure?
+Alan Cox, le Tue 21 Jul 2009 00:51:08 +0100, a =E9crit :
+> I would have thought poll() would have been cleaner. Or perhaps exten=
+ding
+> the VT event interface I added to the vt drivers in the current patch=
+es
+> pending for 2.6.32 - poll support would probably be a bit lighter as
+> you'd just need to do something like
+>=20
+> 	event_count++;
+> 	wake_up(&vcsa_event_wait);
+>=20
+> and check for a count change
 
-I would have thought poll() would have been cleaner. Or perhaps extending
-the VT event interface I added to the vt drivers in the current patches
-pending for 2.6.32 - poll support would probably be a bit lighter as
-you'd just need to do something like
+Sounds like a good plan indeed.
 
-	event_count++;
-	wake_up(&vcsa_event_wait);
-
-and check for a count change
+Samuel
+--
+To unsubscribe from this list: send the line "unsubscribe linux-console=
+" in
+the body of a message to majordomo@vger.kernel.org
+More majordomo info at  http://vger.kernel.org/majordomo-info.html
