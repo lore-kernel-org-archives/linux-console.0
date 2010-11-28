@@ -1,40 +1,36 @@
-From: Alan Cox <alan@lxorguk.ukuu.org.uk>
-Subject: Re: [PATCH 1/2] Kernel fbcon UNICODE font support
-Date: Sat, 27 Nov 2010 13:53:30 +0000
-Message-ID: <20101127135330.5e32a45a@pyx>
-References: <1290765760.6087.3.camel@cai.gentoo>
-	<20101126100915.66112ee7@lxorguk.ukuu.org.uk>
-	<AANLkTi=gUrUZv=3=tEhyjtWfwhADLU5heo7+DYTQboQv@mail.gmail.com>
-	<20101126104121.043cd9fb@lxorguk.ukuu.org.uk>
-	<AANLkTi=T7pfTP0xHmGqLCSj_8vq_kRijCp5NF+VeBz_f@mail.gmail.com>
-	<20101126104818.1e8f6511@lxorguk.ukuu.org.uk>
-	<AANLkTimThFn2c4V3MGmyQESxPYW8Fan3+S92zb4xBdnH@mail.gmail.com>
-	<AANLkTikCgLPgnBVHWW=g=4n8zFjkiikQ6P3S4gDL9X0=@mail.gmail.com>
-	<20101126114205.4fbefa54@pyx>
-	<1290772421.6087.11.camel@cai.gentoo>
-	<20101126232503.30cfe78b@pyx>
-	<1290837149.677.4.camel@cai.gentoo>
+From: Microcai <microcai@fedoraproject.org>
+Subject: VT console need rewrite
+Date: Sun, 28 Nov 2010 18:57:55 +0800
+Message-ID: <1290941875.13526.15.camel@cai.gentoo>
+Reply-To: microcai@fedoraproject.org
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-console-owner@vger.kernel.org>
-In-Reply-To: <1290837149.677.4.camel@cai.gentoo>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=gamma;
+        h=domainkey-signature:received:received:sender:subject:from:reply-to
+         :to:content-type:organization:date:message-id:mime-version:x-mailer
+         :content-transfer-encoding;
+        bh=dyEKvYvbx3ogbgTMmTDn08QGkr1bCJl2B10rFVrUFL8=;
+        b=EdyvxNdqTnwm/LUSnkMwFEZk6SbiHOgJg4laMsLNwnjc8bAppnrL0kZ0nB6E+7rBsS
+         mWq9BiBBSxlUJes5UagxV0+zSHl+MaGlv4t0+ra6y/2weUGkZOilqmFA6dgEJlHFTpyk
+         dJPTcm7p1QLYp2QqKMWbLc9HG7JpPXqaYvIZw=
 Sender: linux-console-owner@vger.kernel.org
 List-ID: <linux-console.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: microcai@fedoraproject.org
-Cc: linux-console@vger.kernel.org
+To: linux-kernel@vger.kernel.org, linux-console@vger.kernel.org
 
-> Think about w3m, It must run on framebuffer to display pictures. 
-> But, I must run on fbterm to display CJK characters .....
+Hi, there
 
-So you want a windowing layer - thats a user space problem. You need that
-anyway to keep the pictures and the text in the right places relative to
-one another and to handle events.
+	I'm implementing the UNICODE font of the framebuffer console, (see
+http://lkml.org/lkml/2010/11/26/50 in case you do not got my email). But
+current vt code is too bugy, too many direct assumes about vt buffer,
+This makes me so hard to hack.  There is TODO telling me to add UNICODE
+support, but no room for such code, that's why my patch is so tricky.
 
-> Well, if you have that time, please find out those softwares that need
-> to rewrite, and, send patches to them. I'm sure they will just reply :
-> why not handle UNICODE in kernel ?!
+	And the code itself, if you'll excuse me, it isn't as beautiful as rest
+of the kernel.
+	So, it really really need a clean rewrite.I'm ganna take is hard job.	
+	And, please tell me if is worth to do so.
 
-Which has been answered, if you want to run multiple graphical apps on a
-framebuffer use a windowing system like everyone else does, and I would
-imagine "use X" is what most of the software people would tell you.
+
