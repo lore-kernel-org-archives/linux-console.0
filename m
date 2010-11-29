@@ -1,47 +1,48 @@
-From: Microcai <microcai@fedoraproject.org>
+From: Samuel Thibault <samuel.thibault@ens-lyon.org>
 Subject: Re: VT console need rewrite
-Date: Mon, 29 Nov 2010 18:12:57 +0800
-Message-ID: <1291025577.9785.7.camel@cai.gentoo>
-References: <1290941875.13526.15.camel@cai.gentoo>
-	 <87mxosla7p.fsf@basil.nowhere.org>
-Reply-To: microcai@fedoraproject.org
+Date: Mon, 29 Nov 2010 11:17:02 +0100
+Message-ID: <20101129101702.GS5142@const.bordeaux.inria.fr>
+References: <1290951770.13526.18.camel@cai.gentoo> <AANLkTimQDWHo4-8-H+5bB_uzrgzU=gqbDBuerq983moR@mail.gmail.com> <20101129020610.7ea7c79e.lisa@ltmnet.com> <1290961207.13526.31.camel@cai.gentoo> <20101128194624.GP2767@thunk.org> <1290993244.877.3.camel@cai.gentoo> <20101129085829.GM5142@const.bordeaux.inria.fr> <1291023157.9785.2.camel@cai.gentoo> <20101129095823.GQ5142@const.bordeaux.inria.fr> <1291025476.9785.5.camel@cai.gentoo>
 Mime-Version: 1.0
 Content-Transfer-Encoding: QUOTED-PRINTABLE
-Return-path: <linux-console-owner@vger.kernel.org>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=gamma;
-        h=domainkey-signature:received:received:sender:subject:from:reply-to
-         :to:cc:in-reply-to:references:content-type:organization:date
-         :message-id:mime-version:x-mailer:content-transfer-encoding;
-        bh=UDqyWOHn/XhRE/CVQ9MQij8ENUflNrVzb+TSe6JBElQ=;
-        b=k5XQIdfTFJCdInKDP/6zWA5MLx5LL/g8fi5aJt7wyAu7DgkGhvozhp+oR7J4gi3MPH
-         qEjhYPCK9cHrxl/47DTVxW37gasDGv1eGLHFpW6zMg3lOOQEsDPuXXOD+vhEcbjdEP1j
-         bPCLuI0OOKfjhEPBsNvxjUVtxC5iGYP3GTaag=
-In-Reply-To: <87mxosla7p.fsf@basil.nowhere.org>
-Sender: linux-console-owner@vger.kernel.org
+Return-path: <linux-kernel-owner@vger.kernel.org>
+Content-Disposition: inline
+In-Reply-To: <1291025476.9785.5.camel@cai.gentoo>
+Sender: linux-kernel-owner@vger.kernel.org
 List-ID: <linux-console.vger.kernel.org>
 Content-Type: text/plain; charset="utf-8"
-To: Andi Kleen <andi@firstfloor.org>
-Cc: linux-kernel@vger.kernel.org, linux-console@vger.kernel.org
+To: Microcai <microcai@fedoraproject.org>
+Cc: Alan Cox <alan@lxorguk.ukuu.org.uk>, Ted Ts'o <tytso@mit.edu>, Lisa Milne <lisa@ltmnet.com>, "jonsmirl@gmail.com" <jonsmirl@gmail.com>, linux-kernel@vger.kernel.org, linux-console@vger.kernel.org
 
-=E5=9C=A8 2010-11-29=E4=B8=80=E7=9A=84 11:01 +0100=EF=BC=8CAndi Kleen=E5=
-=86=99=E9=81=93=EF=BC=9A
-
-> To be honest I have doubts its worth it. This was discussed years and
-> years ago and the conclusion back then that people who need unicode
-> fonts should use them in X or another graphical console environment
-> (there are plenty to chose from these days). Has this changed?
+Microcai, le Mon 29 Nov 2010 18:11:16 +0800, a =C3=A9crit :
+> =E5=9C=A8 2010-11-29=E4=B8=80=E7=9A=84 10:58 +0100=EF=BC=8CSamuel Thi=
+bault=E5=86=99=E9=81=93=EF=BC=9A
+> > Simple unicode font (i.e. just go beyond the arbitrary historical-v=
+ga
+> > 512 glyphs limit for fbcon) might go in.  Double-width is
+> > questionable,
+> > but it can probably simple enough to be able to get in (there is
+> > already
+> > some code for it anyway).
+> >=20
+> > But complete unicode support (with arabic ligatures, tibetan
+> > combinations, etc.) won't ever be accepted in the kernel as that's =
+far
+> > too involved in terms of font rendering.  So the userland way needs=
+ to
+> > be fixed for these anyway, and then things like chinese will go
+> > along...
+> >=20
+> > Samuel=20
 >=20
-> -Andi
->=20
+> YES, my patch just include BMP(mostly CJK), not full UNICODE. IF it c=
+an
+> be included, then I can do more work to make sure it doesn't break ol=
+d
+> stuff. And it's configurable. users don't have to be forced to use.
 
-Yes, it change. Linux graphical stuck have changed a lot. With KMS,
-console got a native resolution, and looks very nice.
+It seems you didn't get my point: what is the use of including CJK into
+kernel when that won't solve the issue for e.g. arabic, while fixing
+fbterm will solve the issue for both arabic and CJK?
 
-
-
---
-To unsubscribe from this list: send the line "unsubscribe linux-console=
-" in
-the body of a message to majordomo@vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
+Samuel
