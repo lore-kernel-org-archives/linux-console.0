@@ -1,46 +1,44 @@
-From: microcai <microcai@fedoraproject.org>
-Subject: Re: [PATCH 1/2] Kernel fbcon UNICODE font support
-Date: Mon, 29 Nov 2010 09:42:30 +0800
-Message-ID: <AANLkTim-S7XcZgKHvGJMG-71B8-73aZ1AX5EFXefcW=w@mail.gmail.com>
-References: <1290765760.6087.3.camel@cai.gentoo> <20101126100915.66112ee7@lxorguk.ukuu.org.uk>
- <AANLkTi=gUrUZv=3=tEhyjtWfwhADLU5heo7+DYTQboQv@mail.gmail.com>
- <20101126104121.043cd9fb@lxorguk.ukuu.org.uk> <AANLkTi=T7pfTP0xHmGqLCSj_8vq_kRijCp5NF+VeBz_f@mail.gmail.com>
- <20101126104818.1e8f6511@lxorguk.ukuu.org.uk> <AANLkTimThFn2c4V3MGmyQESxPYW8Fan3+S92zb4xBdnH@mail.gmail.com>
- <AANLkTikCgLPgnBVHWW=g=4n8zFjkiikQ6P3S4gDL9X0=@mail.gmail.com>
- <20101126114205.4fbefa54@pyx> <1290772421.6087.11.camel@cai.gentoo>
- <20101126232503.30cfe78b@pyx> <1290837149.677.4.camel@cai.gentoo> <20101127135330.5e32a45a@pyx>
+From: Alexey Gladkov <gladkov.alexey@gmail.com>
+Subject: Re: VT console need rewrite
+Date: Mon, 29 Nov 2010 04:55:39 +0300
+Message-ID: <4CF3081B.9090307@gmail.com>
+References: <1290941875.13526.15.camel@cai.gentoo> <73BC440E-833E-4E1B-ACCC-5D68BAB89D83@mit.edu> <1290951770.13526.18.camel@cai.gentoo> <AANLkTimQDWHo4-8-H+5bB_uzrgzU=gqbDBuerq983moR@mail.gmail.com> <20101129020610.7ea7c79e.lisa@ltmnet.com> <1290961207.13526.31.camel@cai.gentoo> <20101128194624.GP2767@thunk.org>
 Mime-Version: 1.0
+Content-Transfer-Encoding: QUOTED-PRINTABLE
 Return-path: <linux-console-owner@vger.kernel.org>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=gamma;
-        h=domainkey-signature:received:mime-version:sender:received
-         :in-reply-to:references:from:date:x-google-sender-auth:message-id
-         :subject:to:cc:content-type;
-        bh=1V+N0akmkCB413MGspEm5IPwz2O6T/vZokxSF1e+7bg=;
-        b=FGXd36lbpQRLPyBCha/PeseYHvg1jhD/ZbL65vVCU5j0cQK1hqp/F6yQaAK5jxXKq3
-         Y+ji6THFSsKXErVtIrE9ZVxQiiPbCxCT2aaGk8uTveb9PPW8J6ZFgoVgkxDlFSMoQcUT
-         OJCDqzZeK54UZ1GI+pDFa6Z6k44cjVkmMhZ1Y=
-In-Reply-To: <20101127135330.5e32a45a@pyx>
+In-Reply-To: <20101128194624.GP2767@thunk.org>
 Sender: linux-console-owner@vger.kernel.org
 List-ID: <linux-console.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-To: Alan Cox <alan@lxorguk.ukuu.org.uk>
-Cc: linux-console@vger.kernel.org
+Content-Type: text/plain; charset="windows-1252"
+To: Ted Ts'o <tytso@mit.edu>, Microcai <microcai@fedoraproject.org>, Lisa Milne <lisa@ltmnet.com>, "jonsmirl@gmail.com" <jonsmirl@gmail.com>, linux-kernel@vger.kernel.org, linux-console@v
 
->
->> Well, if you have that time, please find out those softwares that need
->> to rewrite, and, send patches to them. I'm sure they will just reply :
->> why not handle UNICODE in kernel ?!
->
-> Which has been answered, if you want to run multiple graphical apps on a
-> framebuffer use a windowing system like everyone else does, and I would
-> imagine "use X" is what most of the software people would tell you.
->
+28.11.2010 22:46, Ted Ts'o wrote:
+> How many people do regular login, development, reading e-mail, etc.,
+> on the console?  Very few!
 
-think of w3m. which runs on framebuffer, so ,fbterm is useless here.
-But w3m uses framebuffer to draw pictures, not characters.
-So, if you want nice output, enable UNICODE font in kernel will be the
-best way rather than hacking into the w3m code.
-if you hack one w3m ,there will be another one that need this kinds of hack ....
-implement it in kernel was/is/will be the best choice.
+Once I broke the euro symbol in the kbd keymaps and got a kick in the
+ass very quickly :). It means that users continue to use the console
+quite active.
+
+Another example: I keep getting a new keymaps and console fonts for
+each new kbd release.
+
+Maybe not a lot of console users, but more of them than you think.
+
+> If the answer is because you hate X, as
+> you've already pointed out, we already have fbterm.  Where is it
+> written that we need to have a full unicode-capable console system?
+
+fbterm =E2=80=8Ecan't help in all cases. For example: we have a limitat=
+ion
+NR_KEYS, which makes it impossible to use keycode > 256 in keymaps.
+I've already received several complaints about it.
+
+--=20
+Rgrds, legion
+
+--
+To unsubscribe from this list: send the line "unsubscribe linux-console=
+" in
+the body of a message to majordomo@vger.kernel.org
+More majordomo info at  http://vger.kernel.org/majordomo-info.html
