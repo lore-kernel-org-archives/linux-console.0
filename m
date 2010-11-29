@@ -1,42 +1,52 @@
 From: Samuel Thibault <samuel.thibault@ens-lyon.org>
-Subject: Re: VT console need rewrite
-Date: Mon, 29 Nov 2010 09:59:13 +0100
-Message-ID: <20101129085913.GN5142@const.bordeaux.inria.fr>
-References: <73BC440E-833E-4E1B-ACCC-5D68BAB89D83@mit.edu> <1290951770.13526.18.camel@cai.gentoo> <AANLkTimQDWHo4-8-H+5bB_uzrgzU=gqbDBuerq983moR@mail.gmail.com> <1290954545.13526.27.camel@cai.gentoo> <20101128191152.GV10602@const.famille.thibault.fr> <1290993006.877.0.camel@cai.gentoo> <20101129081639.GA5142@const.bordeaux.inria.fr> <AANLkTinmdRjEkmywaMevN5_A=2N8_pBsOAJj8PoAaznz@mail.gmail.com> <20101129082711.GB5142@const.bordeaux.inria.fr> <1291020805.9785.0.camel@cai.gentoo>
+Subject: Re: [PATCH 1/2] Kernel fbcon UNICODE font support
+Date: Mon, 29 Nov 2010 09:52:19 +0100
+Message-ID: <20101129085219.GL5142@const.bordeaux.inria.fr>
+References: <AANLkTi=T7pfTP0xHmGqLCSj_8vq_kRijCp5NF+VeBz_f@mail.gmail.com> <20101126104818.1e8f6511@lxorguk.ukuu.org.uk> <AANLkTimThFn2c4V3MGmyQESxPYW8Fan3+S92zb4xBdnH@mail.gmail.com> <AANLkTikCgLPgnBVHWW=g=4n8zFjkiikQ6P3S4gDL9X0=@mail.gmail.com> <20101126114205.4fbefa54@pyx> <1290772421.6087.11.camel@cai.gentoo> <20101126232503.30cfe78b@pyx> <1290837149.677.4.camel@cai.gentoo> <20101127135330.5e32a45a@pyx> <AANLkTim-S7XcZgKHvGJMG-71B8-73aZ1AX5EFXefcW=w@mail.gmail.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: QUOTED-PRINTABLE
 Return-path: <linux-console-owner@vger.kernel.org>
 Content-Disposition: inline
-In-Reply-To: <1291020805.9785.0.camel@cai.gentoo>
+In-Reply-To: <AANLkTim-S7XcZgKHvGJMG-71B8-73aZ1AX5EFXefcW=w@mail.gmail.com>
 Sender: linux-console-owner@vger.kernel.org
 List-ID: <linux-console.vger.kernel.org>
-Content-Type: text/plain; charset="utf-8"
-To: Microcai <microcai@fedoraproject.org>
-Cc: "jonsmirl@gmail.com" <jonsmirl@gmail.com>, Theodore Tso <tytso@mit.edu>, linux-kernel@vger.kernel.org, linux-console@vger.kernel.org
+Content-Type: text/plain; charset="iso-8859-1"
+To: microcai <microcai@fedoraproject.org>
+Cc: Alan Cox <alan@lxorguk.ukuu.org.uk>, linux-console@vger.kernel.org
 
-Microcai, le Mon 29 Nov 2010 16:53:25 +0800, a =C3=A9crit :
-> =E5=9C=A8 2010-11-29=E4=B8=80=E7=9A=84 09:27 +0100=EF=BC=8CSamuel Thi=
-bault=E5=86=99=E9=81=93=EF=BC=9A
-> > microcai, le Mon 29 Nov 2010 16:20:11 +0800, a =C3=A9crit :
-> > > > But isn't that basically what you are describing?
-> > > >
-> > > > (i.e. what's the use of using a pts and /dev/fb, if not for a u=
-serlevel
-> > > > terminal to actually do the work?)
-> > > >
-> > >=20
-> > > ok, try run zhcon on pts.  can you do that ?
-> >=20
-> > zhcon _provides_ a pts, that's what I mean.
+microcai, le Mon 29 Nov 2010 09:42:30 +0800, a =E9crit :
+> >> Well, if you have that time, please find out those softwares that =
+need
+> >> to rewrite, and, send patches to them. I'm sure they will just rep=
+ly :
+> >> why not handle UNICODE in kernel ?!
+> >
+> > Which has been answered, if you want to run multiple graphical apps=
+ on a
+> > framebuffer use a windowing system like everyone else does, and I w=
+ould
+> > imagine "use X" is what most of the software people would tell you.
 >=20
-> So you agree zhcon can't run on pts.
+> think of w3m. which runs on framebuffer, so ,fbterm is useless here.
+> But w3m uses framebuffer to draw pictures, not characters.
+> So, if you want nice output, enable UNICODE font in kernel will be th=
+e
+> best way rather than hacking into the w3m code.
 
-Sure. It doesn't make sense. But what zhcon does should be done in
-fbterm.
+Well, fbterm shouldn't prevent applications from being able to draw on
+the console.  That's where the fix could go too (and it makes a lot of
+sense).
 
-> Then there's dozens of zhcon.
+> if you hack one w3m ,there will be another one that need this kinds o=
+f hack ....
+> implement it in kernel was/is/will be the best choice.
 
-What do you mean by this?
+The kernel will never accept good enough support for all kind of unicod=
+e
+script.  Think of arabic ligatures, tibetan combinations, etc.  You
+don't want to put a rendering engine for these in the kernel.  fbterm i=
+s
+there for that.
 
 Samuel
 --
