@@ -1,55 +1,52 @@
-From: Alan Cox <alan@lxorguk.ukuu.org.uk>
+From: Valdis.Kletnieks@vt.edu
 Subject: Re: VT console need rewrite
-Date: Mon, 29 Nov 2010 14:07:21 +0000
-Message-ID: <20101129140721.40bbc1e8@lxorguk.ukuu.org.uk>
-References: <1290941875.13526.15.camel@cai.gentoo>
-	<73BC440E-833E-4E1B-ACCC-5D68BAB89D83@mit.edu>
-	<1290951770.13526.18.camel@cai.gentoo>
-	<AANLkTimQDWHo4-8-H+5bB_uzrgzU=gqbDBuerq983moR@mail.gmail.com>
-	<20101129020610.7ea7c79e.lisa@ltmnet.com>
-	<1290961207.13526.31.camel@cai.gentoo>
-	<20101128234634.461daec4@pyx>
-	<1290994083.877.13.camel@cai.gentoo>
+Date: Mon, 29 Nov 2010 12:50:37 -0500
+Message-ID: <12794.1291053037@localhost>
+References: <1290941875.13526.15.camel@cai.gentoo> <73BC440E-833E-4E1B-ACCC-5D68BAB89D83@mit.edu> <1290951770.13526.18.camel@cai.gentoo> <AANLkTimQDWHo4-8-H+5bB_uzrgzU=gqbDBuerq983moR@mail.gmail.com> <20101129020610.7ea7c79e.lisa@ltmnet.com> <1290961207.13526.31.camel@cai.gentoo> <20101128194624.GP2767@thunk.org> <4CF3081B.9090307@gmail.com>
+            <1290996846.877.23.camel@cai.gentoo>
 Mime-Version: 1.0
+Content-Type: multipart/signed; boundary="==_Exmh_1291053037_5346P";
+	 micalg=pgp-sha1; protocol="application/pgp-signature"
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-console-owner@vger.kernel.org>
-In-Reply-To: <1290994083.877.13.camel@cai.gentoo>
+In-Reply-To: Your message of "Mon, 29 Nov 2010 10:14:06 +0800."
+             <1290996846.877.23.camel@cai.gentoo>
 Sender: linux-console-owner@vger.kernel.org
 List-ID: <linux-console.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
 To: microcai@fedoraproject.org
-Cc: Lisa Milne <lisa@ltmnet.com>, "jonsmirl@gmail.com" <jonsmirl@gmail.com>, Theodore Tso <tytso@mit.edu>, linux-kernel@vger.kernel.org, linux-console@vger.kernel.org
+Cc: Alexey Gladkov <gladkov.alexey@gmail.com>, Ted Ts'o <tytso@mit.edu>, Lisa Milne <lisa@ltmnet.com>, "jonsmirl@gmail.com" <jonsmirl@gmail.com>, linux-kernel@vger.kernel.org, linux-console@vger.kernel.org, Alan Cox <alan@lxorguk.ukuu.org.uk>
 
-> Don't you see the cosole code ? There is TODO that say , "hey , I need
-> UNICODE support..."
+--==_Exmh_1291053037_5346P
+Content-Type: text/plain; charset=us-ascii
 
-And what has happened over time is that we've learned
+On Mon, 29 Nov 2010 10:14:06 +0800, Microcai said:
 
-- that real unicode is hard
-- that some languages need very complex character handling, and this
-  happens to be most of the major non western european languages in the
-  world today
+> The thing is, you really should agree that, implementing UNICODE font in
+> kernel isn't a bad idea.
 
-and someone put all the needed logic into pango, and people wrote fbterm
-and friends. The world has moved on
+Let us know when you have implemented support for bidirectional
+scripts that require compositing or half-spacing characters.  Without
+blowing out the 8K kernel stack.
 
-> Simply drawing characters won't need any hw acceleration. It doesn't
-> matter if it is slow. KMS and Wayland will make more people work under
-> console, trust me.
+Doing it *right* is important:
 
-No I don't trust you, sorry. You need compositing acceleration to do some
-of the character composing efficiently and to do anti-aliasing which for
-small symbols in many non western fonts is rather essential.
+http://gizmodo.com/382026/a-cellphones-missing-dot-kills-two-people-puts-three-more-in-jail
 
-> > Your other problem is mode setting, VESA is on its way out, a lot of
-> No, VESA will still be here for another decades. Some fb driver conflict
+Two dead, three in jail.  All because of broken font support.  That's a good
+reason to not even try unless you can do it *right*.
 
-VESA is X86 specific, PC class hardware specific and subject to various
-assumptions, when it works.
 
-No VESA on Intel MID platforms, no VESA on PPC, no VESA on Android phones
+--==_Exmh_1291053037_5346P
+Content-Type: application/pgp-signature
 
-> printk console , if redirect to a ttyS? , then the outer Linux world
-> terminal will do UNICODE handling. 
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.10 (GNU/Linux)
+Comment: Exmh version 2.5 07/13/2001
 
-In a window in a debug/development environment under X11 with Pango..
+iD8DBQFM8+ftcC3lWbTT17ARAlxKAKCTOUIUHdlat0z4yt3eMrwDFXF/LgCg/wFQ
+hzNT/SfHoi4UBOJHaiDDzgc=
+=ypM3
+-----END PGP SIGNATURE-----
+
+--==_Exmh_1291053037_5346P--
+
