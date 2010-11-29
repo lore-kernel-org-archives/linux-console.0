@@ -1,70 +1,60 @@
-From: Microcai <microcai@fedoraproject.org>
+From: =?utf-8?Q?Am=C3=A9rico?= Wang <xiyou.wangcong@gmail.com>
 Subject: Re: VT console need rewrite
-Date: Mon, 29 Nov 2010 10:14:06 +0800
-Message-ID: <1290996846.877.23.camel@cai.gentoo>
+Date: Mon, 29 Nov 2010 10:49:18 +0800
+Message-ID: <20101129024918.GA5218@cr0.nay.redhat.com>
 References: <1290941875.13526.15.camel@cai.gentoo>
-	 <73BC440E-833E-4E1B-ACCC-5D68BAB89D83@mit.edu>
-	 <1290951770.13526.18.camel@cai.gentoo>
-	 <AANLkTimQDWHo4-8-H+5bB_uzrgzU=gqbDBuerq983moR@mail.gmail.com>
-	 <20101129020610.7ea7c79e.lisa@ltmnet.com>
-	 <1290961207.13526.31.camel@cai.gentoo> <20101128194624.GP2767@thunk.org>
-	 <4CF3081B.9090307@gmail.com>
-Reply-To: microcai@fedoraproject.org
+ <73BC440E-833E-4E1B-ACCC-5D68BAB89D83@mit.edu>
+ <1290951770.13526.18.camel@cai.gentoo>
+ <AANLkTimQDWHo4-8-H+5bB_uzrgzU=gqbDBuerq983moR@mail.gmail.com>
+ <1290954545.13526.27.camel@cai.gentoo>
+ <20101128191152.GV10602@const.famille.thibault.fr>
+ <1290993006.877.0.camel@cai.gentoo>
 Mime-Version: 1.0
 Content-Transfer-Encoding: QUOTED-PRINTABLE
-Return-path: <linux-kernel-owner@vger.kernel.org>
+Return-path: <linux-console-owner@vger.kernel.org>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=gamma;
-        h=domainkey-signature:received:received:sender:subject:from:reply-to
-         :to:cc:in-reply-to:references:content-type:organization:date
-         :message-id:mime-version:x-mailer:content-transfer-encoding;
-        bh=CXmu3KtGGpxjp+xyTsVkZ0uamcR7HDZI57BgV30TnR4=;
-        b=hfPaoo/SAEA7Hh9HIhoiHYFEGun0OBWS0wiJUs2QmSpAeZT3bNsOfIbYGFywbPfL9z
-         wBfyRxNvRC48mr3uGQp7HQuYk3paqUs6ZQtqN0BwLGYJkCbTB8V1DFBI7MkHItWnIPB7
-         N1YNTHRRy2uUJ0LCWLdrca3lcJpyBZIX+Atgc=
-In-Reply-To: <4CF3081B.9090307@gmail.com>
-Sender: linux-kernel-owner@vger.kernel.org
+        h=domainkey-signature:received:received:date:from:to:cc:subject
+         :message-id:references:mime-version:content-type:content-disposition
+         :content-transfer-encoding:in-reply-to:user-agent;
+        bh=oAUBUxsfGx//ikmpuv7IxmV3QoBNhfRXF0dz0yZ2lkM=;
+        b=MHNIVpRDfKoezeBeLjOHF7B92uNQJBQ59pZRDAem9r69N8tRGrddbAod4CDQepK2z4
+         /8BDwXyxOcWxXhMu8qSKS1dSKDsYhRYPRkYZJhQKmYE21bo2wo43VmUfLFT89QqcOAe5
+         vQI8xcXrxWArYGTbvJ8gvJbwtyk9Iiw6Qd+aA=
+Content-Disposition: inline
+In-Reply-To: <1290993006.877.0.camel@cai.gentoo>
+Sender: linux-console-owner@vger.kernel.org
 List-ID: <linux-console.vger.kernel.org>
 Content-Type: text/plain; charset="utf-8"
-To: Alexey Gladkov <gladkov.alexey@gmail.com>
-Cc: Ted Ts'o <tytso@mit.edu>, Lisa Milne <lisa@ltmnet.com>, "jonsmirl@gmail.com" <jonsmirl@gmail.com>, linux-kernel@vger.kernel.org, linux-console@vger.kernel.org, Alan Cox <alan@lxorguk.ukuu.org.uk>
+To: Microcai <microcai@fedoraproject.org>
+Cc: Samuel Thibault <samuel.thibault@ens-lyon.org>, "jonsmirl@gmail.com" <jonsmirl@gmail.com>, Theodore Tso <tytso@mit.edu>, linux-kernel@vger.kernel.org, linux-console@vger.kernel.org
 
-=E5=9C=A8 2010-11-29=E4=B8=80=E7=9A=84 04:55 +0300=EF=BC=8CAlexey Gladk=
-ov=E5=86=99=E9=81=93=EF=BC=9A
-> 28.11.2010 22:46, Ted Ts'o wrote:
-> > How many people do regular login, development, reading e-mail, etc.=
-,
-> > on the console?  Very few!
->=20
-> Once I broke the euro symbol in the kbd keymaps and got a kick in the
-> ass very quickly :). It means that users continue to use the console
-> quite active.
->=20
-> Another example: I keep getting a new keymaps and console fonts for
-> each new kbd release.
->=20
-> Maybe not a lot of console users, but more of them than you think.
->=20
-> > If the answer is because you hate X, as
-> > you've already pointed out, we already have fbterm.  Where is it
-> > written that we need to have a full unicode-capable console system?
->=20
-> fbterm =E2=80=8Ecan't help in all cases. For example: we have a limit=
-ation
-> NR_KEYS, which makes it impossible to use keycode > 256 in keymaps.
-> I've already received several complaints about it.
->=20
+On Mon, Nov 29, 2010 at 09:10:06AM +0800, Microcai wrote:
+>=E5=9C=A8 2010-11-28=E6=97=A5=E7=9A=84 20:11 +0100=EF=BC=8CSamuel Thib=
+ault=E5=86=99=E9=81=93=EF=BC=9A
+>> Microcai, le Sun 28 Nov 2010 22:29:05 +0800, a =C3=A9crit :
+>> > So, here is the design according to your description  ..=20
+>> >=20
+>> > JUST export /dev/fb and /dev/pts and /dev/console
+>> > The kernel use /dev/console, but invisible.=20
+>> > The rest of the world uses /dev/pts
+>> >=20
+>> > Make init using /dev/fb to display boot message, and agetty runs
+>> > on /dev/pts
+>>=20
+>> Errr, but that already exists, that's fbterm...
+>>=20
+>> Samuel
+>
+>Every time someone try to implement something , some other guy will ju=
+mp
+>out and say, that already exist, in user-space ..... blablablabla
+>
 
-YES, user-space can't always fit! Some function need to be implemented
-in kernel. And that's why we have KMS, we have auto cgroup ....
-
-Don't say, hey , hard to implement, all you have to to is apply the
-path .. No need to do for you.
-
-If the patch isn't as good as you expected, reject, I'll try better one=
-=2E
-The thing is, you really should agree that, implementing UNICODE font i=
-n
-kernel isn't a bad idea.
-
-
+Remember, remember, kernel provides a mechanism, not a policy.
+(From this point, auto-groups *does* break it.)
+--
+To unsubscribe from this list: send the line "unsubscribe linux-console=
+" in
+the body of a message to majordomo@vger.kernel.org
+More majordomo info at  http://vger.kernel.org/majordomo-info.html
