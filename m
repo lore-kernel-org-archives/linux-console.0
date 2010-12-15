@@ -1,33 +1,48 @@
 From: Pavel Machek <pavel@ucw.cz>
 Subject: Re: VT console need rewrite
-Date: Wed, 15 Dec 2010 15:40:55 +0100
-Message-ID: <20101215144055.GA10467@ucw.cz>
-References: <1290941875.13526.15.camel@cai.gentoo>
- <87mxosla7p.fsf@basil.nowhere.org>
- <20101213071328.GB2328@ucw.cz>
- <20101213101801.1f698c7c@lxorguk.ukuu.org.uk>
+Date: Wed, 15 Dec 2010 15:45:02 +0100
+Message-ID: <20101215144501.GB10467@ucw.cz>
+References: <73BC440E-833E-4E1B-ACCC-5D68BAB89D83@mit.edu>
+ <1290951770.13526.18.camel@cai.gentoo>
+ <AANLkTimQDWHo4-8-H+5bB_uzrgzU=gqbDBuerq983moR@mail.gmail.com>
+ <20101129020610.7ea7c79e.lisa@ltmnet.com>
+ <1290961207.13526.31.camel@cai.gentoo>
+ <20101128194624.GP2767@thunk.org>
+ <1290993244.877.3.camel@cai.gentoo>
+ <20101129085829.GM5142@const.bordeaux.inria.fr>
+ <1291023157.9785.2.camel@cai.gentoo>
+ <20101129095823.GQ5142@const.bordeaux.inria.fr>
 Mime-Version: 1.0
 Return-path: <linux-console-owner@vger.kernel.org>
 Content-Disposition: inline
-In-Reply-To: <20101213101801.1f698c7c@lxorguk.ukuu.org.uk>
+In-Reply-To: <20101129095823.GQ5142@const.bordeaux.inria.fr>
 Sender: linux-console-owner@vger.kernel.org
 List-ID: <linux-console.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-To: Alan Cox <alan@lxorguk.ukuu.org.uk>
-Cc: Andi Kleen <andi@firstfloor.org>, microcai@fedoraproject.org, linux-kernel@vger.kernel.org, linux-console@vger.kernel.org
+To: Samuel Thibault <samuel.thibault@ens-lyon.org>, Microcai <microcai@fedoraproject.org>, Ted Ts'o <tytso@mit.edu>, Lisa Milne <lisa@ltmnet.com>, "jonsmirl@gmail.com" <jonsmirl@gmail.com>
 
 Hi!
 
-> > Yes. These days kernel sources and kernel messages both contain
-> > non-ASCII characters... as well as many filesystems.
+> > I have many different kinds of patchs that did it in different ways.
+> > 
+> > What realy matters is that, do we agree that add unicode font support is
+> > acceptable ?
 > 
-> But not in kernel printed messages.
+> Simple unicode font (i.e. just go beyond the arbitrary historical-vga
+> 512 glyphs limit for fbcon) might go in.  Double-width is questionable,
 
-Yes, even in those (but something eats my mail).
+That would be very nice, yes.
 
-CAFE driver has non-ascii characters in pci device name, and that
-leaks to dmesg.
+> But complete unicode support (with arabic ligatures, tibetan
+> combinations, etc.) won't ever be accepted in the kernel as that's far
+> too involved in terms of font rendering.  So the userland way needs to
+> be fixed for these anyway, and then things like chinese will go along...
+
+Well... english has ligatures, too (fi); console does not support them
+nicely and we still use it. Support for eastern european characters by
+default would be very very nice... and yes, that's just breaking the
+256 char limit, nothing more complex.
 									Pavel
 -- 
 (english) http://www.livejournal.com/~pavelmachek
