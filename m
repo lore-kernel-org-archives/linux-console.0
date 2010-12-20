@@ -1,52 +1,38 @@
-From: Samuel Thibault <samuel.thibault@ens-lyon.org>
+From: Pavel Machek <pavel@ucw.cz>
 Subject: Re: VT console need rewrite
-Date: Wed, 15 Dec 2010 16:04:26 +0100
-Message-ID: <20101215150426.GA26989@const.bordeaux.inria.fr>
-References: <1290951770.13526.18.camel@cai.gentoo> <AANLkTimQDWHo4-8-H+5bB_uzrgzU=gqbDBuerq983moR@mail.gmail.com> <20101129020610.7ea7c79e.lisa@ltmnet.com> <1290961207.13526.31.camel@cai.gentoo> <20101128194624.GP2767@thunk.org> <1290993244.877.3.camel@cai.gentoo> <20101129085829.GM5142@const.bordeaux.inria.fr> <1291023157.9785.2.camel@cai.gentoo> <20101129095823.GQ5142@const.bordeaux.inria.fr> <20101215144501.GB10467@ucw.cz>
+Date: Mon, 20 Dec 2010 07:35:26 +0100
+Message-ID: <20101220063525.GA1585@ucw.cz>
+References: <1290941875.13526.15.camel@cai.gentoo>
+ <73BC440E-833E-4E1B-ACCC-5D68BAB89D83@mit.edu>
+ <1290951770.13526.18.camel@cai.gentoo>
+ <AANLkTimQDWHo4-8-H+5bB_uzrgzU=gqbDBuerq983moR@mail.gmail.com>
+ <20101129020610.7ea7c79e.lisa@ltmnet.com>
+ <1290961207.13526.31.camel@cai.gentoo>
+ <20101128234634.461daec4@pyx>
+ <1290994083.877.13.camel@cai.gentoo>
+ <20101129140721.40bbc1e8@lxorguk.ukuu.org.uk>
+ <AANLkTi=qRvSC3hDm032tL0bgWV93ON6A+SEBn+1qmWZ8@mail.gmail.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: QUOTED-PRINTABLE
 Return-path: <linux-console-owner@vger.kernel.org>
 Content-Disposition: inline
-In-Reply-To: <20101215144501.GB10467@ucw.cz>
+In-Reply-To: <AANLkTi=qRvSC3hDm032tL0bgWV93ON6A+SEBn+1qmWZ8@mail.gmail.com>
 Sender: linux-console-owner@vger.kernel.org
 List-ID: <linux-console.vger.kernel.org>
-Content-Type: text/plain; charset="iso-8859-1"
-To: Pavel Machek <pavel@ucw.cz>
-Cc: Microcai <microcai@fedoraproject.org>, Ted Ts'o <tytso@mit.edu>, Lisa Milne <lisa@ltmnet.com>, "jonsmirl@gmail.com" <jonsmirl@gmail.com>, linux-kernel@vger.kernel.org, linux-console@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+To: microcai <microcai@fedoraproject.org>
+Cc: Alan Cox <alan@lxorguk.ukuu.org.uk>, Lisa Milne <lisa@ltmnet.com>, "jonsmirl@gmail.com" <jonsmirl@gmail.com>, Theodore Tso <tytso@mit.edu>, linux-kernel@vger.kernel.org, linux-console@vger.kernel.org
 
-Pavel Machek, le Wed 15 Dec 2010 15:45:02 +0100, a =E9crit :
-> > But complete unicode support (with arabic ligatures, tibetan
-> > combinations, etc.) won't ever be accepted in the kernel as that's =
-far
-> > too involved in terms of font rendering.  So the userland way needs=
- to
-> > be fixed for these anyway, and then things like chinese will go alo=
-ng...
->=20
-> Well... english has ligatures, too (fi);
+On Tue 2010-11-30 13:05:51, microcai wrote:
+> OK, let me vanish in a few months.
+> 
+> hopefully I'll be back with a patch fix that stupid 512 glyph limitation.
 
-English ligatures are extremely far from what arabic needs. People
-don't even actually know that there are ligatures in English, while for
-arabic, people would even have a hard time reading something that isn't
-using ligatures.
+Looking forward.
+								Pavel
+(Who'd rather like to see reasonable support for eastern *and* western
+europe.)
 
-> console does not support them nicely and we still use it.
-
-Err, I've very rarely seen the fi/ff ligatures on the console, it was
-mostly from copy/pastes from pdf documents.
-
-> Support for eastern european characters by default would be very very
-> nice... and yes, that's just breaking the 256 char limit, nothing mor=
-e
-> complex.
-
-The console can do 512 glyphs, not only 256, so eastern europe support
-is a matter of combining a latin1 font with parts of the other latin
-fonts. That already covers a lot of european languages.
-
-Samuel
---
-To unsubscribe from this list: send the line "unsubscribe linux-console=
-" in
-the body of a message to majordomo@vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
+-- 
+(english) http://www.livejournal.com/~pavelmachek
+(cesky, pictures) http://atrey.karlin.mff.cuni.cz/~pavel/picture/horses/blog.html
