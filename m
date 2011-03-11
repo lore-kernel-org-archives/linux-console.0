@@ -1,38 +1,37 @@
-From: Pavel Machek <pavel@ucw.cz>
-Subject: Re: VT console need rewrite
-Date: Mon, 20 Dec 2010 07:35:26 +0100
-Message-ID: <20101220063525.GA1585@ucw.cz>
-References: <1290941875.13526.15.camel@cai.gentoo>
- <73BC440E-833E-4E1B-ACCC-5D68BAB89D83@mit.edu>
- <1290951770.13526.18.camel@cai.gentoo>
- <AANLkTimQDWHo4-8-H+5bB_uzrgzU=gqbDBuerq983moR@mail.gmail.com>
- <20101129020610.7ea7c79e.lisa@ltmnet.com>
- <1290961207.13526.31.camel@cai.gentoo>
- <20101128234634.461daec4@pyx>
- <1290994083.877.13.camel@cai.gentoo>
- <20101129140721.40bbc1e8@lxorguk.ukuu.org.uk>
- <AANLkTi=qRvSC3hDm032tL0bgWV93ON6A+SEBn+1qmWZ8@mail.gmail.com>
+From: Jeremy Jackson <jerj@coplanar.net>
+Subject: signal to PID 1 from serial console like KeyboardRequest or CAD
+Date: Fri, 11 Mar 2011 08:43:52 -0500
+Message-ID: <4D7A2718.5090607@coplanar.net>
 Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-console-owner@vger.kernel.org>
-Content-Disposition: inline
-In-Reply-To: <AANLkTi=qRvSC3hDm032tL0bgWV93ON6A+SEBn+1qmWZ8@mail.gmail.com>
 Sender: linux-console-owner@vger.kernel.org
 List-ID: <linux-console.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-To: microcai <microcai@fedoraproject.org>
-Cc: Alan Cox <alan@lxorguk.ukuu.org.uk>, Lisa Milne <lisa@ltmnet.com>, "jonsmirl@gmail.com" <jonsmirl@gmail.com>, Theodore Tso <tytso@mit.edu>, linux-kernel@vger.kernel.org, linux-console@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"; format="flowed"
+To: linux-console@vger.kernel.org
 
-On Tue 2010-11-30 13:05:51, microcai wrote:
-> OK, let me vanish in a few months.
-> 
-> hopefully I'll be back with a patch fix that stupid 512 glyph limitation.
+Hi,
 
-Looking forward.
-								Pavel
-(Who'd rather like to see reasonable support for eastern *and* western
-europe.)
+I ran into a problem recently on a Linux server with a remote serial 
+console.  /sbin/init (actually Upstart) was in a state where nothing 
+(useful) was running.  I had to power cycle the machine to get back to 
+the boot prompt.  This has the side-effect of triggering raid rebuilds.
+
+It would be nice to have what Ctrl-Alt-Del does at the VGA console with 
+PS/2 or USB keyboard. This sends a SIGINT to PID 1, and most distros 
+have this set to do "shutdown -r now" which attempts a clean reboot.
+
+Once upon a time there was KeyboardRequest, which would send a SIGWINCH 
+to PID 1 (when pressing Alt-UP_arrow?).  I don't see any sign of this 
+feature in Linux 2.6.32 though.
+
+Looking at the Sysrq handlers in the kernel I don't see any keystrokes 
+that send SIGINT to PID 1 either.
+
+So, I'm wondering if it makes sense to add a Sysrq key to send a signal 
+to PID1 ?
 
 -- 
-(english) http://www.livejournal.com/~pavelmachek
-(cesky, pictures) http://atrey.karlin.mff.cuni.cz/~pavel/picture/horses/blog.html
+Coplanar Networks
+http://www.coplanar.net
+(519)489-4903
