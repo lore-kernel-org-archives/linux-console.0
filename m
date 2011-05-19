@@ -1,29 +1,39 @@
 From: Timur Tabi <timur@freescale.com>
 Subject: Re: [PATCH 6/7] tty/powerpc: introduce the ePAPR embedded hypervisor
  byte channel driver
-Date: Thu, 19 May 2011 11:18:02 -0500
-Message-ID: <4DD542BA.6040608@freescale.com>
-References: <1305813272-31826-1-git-send-email-timur@freescale.com> <1305813272-31826-7-git-send-email-timur@freescale.com> <20110519153358.5876f310@lxorguk.ukuu.org.uk> <4DD533DE.1020705@freescale.com> <20110519165039.7fd8ec34@lxorguk.ukuu.org.uk> <4DD53D1B.4060600@freescale.com> <20110519160239.GB25606@kroah.com>
+Date: Thu, 19 May 2011 11:31:32 -0500
+Message-ID: <4DD545E4.9090408@freescale.com>
+References: <1305813272-31826-1-git-send-email-timur@freescale.com>	<1305813272-31826-7-git-send-email-timur@freescale.com> <20110519153358.5876f310@lxorguk.ukuu.org.uk>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
-Return-path: <linux-kernel-owner@vger.kernel.org>
-In-Reply-To: <20110519160239.GB25606@kroah.com>
-Sender: linux-kernel-owner@vger.kernel.org
+Return-path: <linux-console-owner@vger.kernel.org>
+In-Reply-To: <20110519153358.5876f310@lxorguk.ukuu.org.uk>
+Sender: linux-console-owner@vger.kernel.org
 List-ID: <linux-console.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: Greg KH <greg@kroah.com>
-Cc: Alan Cox <alan@lxorguk.ukuu.org.uk>, kumar.gala@freescale.com, benh@kernel.crashing.org, akpm@kernel.org, linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org, linux-console@vger.kernel.org
+To: Alan Cox <alan@lxorguk.ukuu.org.uk>
+Cc: kumar.gala@freescale.com, benh@kernel.crashing.org, greg@kroah.com, akpm@kernel.org, linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org, linux-console@vger.kernel.org
 
-Greg KH wrote:
-> It's too late, it needed to be in linux-next _before_ the window opened.
-> 
-> sorry,
+Alan Cox wrote:
+> You really also need a hangup method so vhangup() does the right thing
+> and you can securely do logins etc and sessions on your console. As
+> you've got no hardware entangled in this and you already use tty_port
+> helpers the hangup helper will do the work for you.
 
-Curses!  Foiled again!
+So all I need is this?
 
-Well, then I'd like to get this patchset fixed up and approved soon after the
-window closes, so that there's no excuse for missing 2.6.41.
+static void ehv_bc_tty_hangup(struct tty_struct *ttys)
+{
+	struct ehv_bc_data *bc = ttys->driver_data;
+
+	tty_port_hangup(&bc->port);
+}
+
+I've noticed that some drivers flush their transmit buffers before calling
+tty_port_hangup(), but some others don't.  Should I do this too?  I don't know
+if hangup should be as quick as possible.
 
 -- 
 Timur Tabi
 Linux kernel developer at Freescale
+
