@@ -1,37 +1,34 @@
-From: Jeremy Jackson <jerj@coplanar.net>
-Subject: signal to PID 1 from serial console like KeyboardRequest or CAD
-Date: Fri, 11 Mar 2011 08:43:52 -0500
-Message-ID: <4D7A2718.5090607@coplanar.net>
+From: Timur Tabi <timur@freescale.com>
+Subject: [PATCH 0/7] This patchset adds support for running Linux under the Freescale hypervisor,
+Date: Thu, 19 May 2011 08:54:25 -0500
+Message-ID: <1305813272-31826-1-git-send-email-timur@freescale.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Return-path: <linux-console-owner@vger.kernel.org>
-Sender: linux-console-owner@vger.kernel.org
+Return-path: <linux-kernel-owner@vger.kernel.org>
+Sender: linux-kernel-owner@vger.kernel.org
 List-ID: <linux-console.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"; format="flowed"
-To: linux-console@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+To: kumar.gala@freescale.com, benh@kernel.crashing.org, greg@kroah.com, akpm@kernel.org, linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org, linux-console@vger.kernel.org
 
-Hi,
+have hypervisor extensions (e.g. the P4080 which has an e500mc core).
 
-I ran into a problem recently on a Linux server with a remote serial 
-console.  /sbin/init (actually Upstart) was in a state where nothing 
-(useful) was running.  I had to power cycle the machine to get back to 
-the boot prompt.  This has the side-effect of triggering raid rebuilds.
+I think it makes sense for this patchset to go through Kumar Gala's -next 
+branch, but I still need ACKs from various people on the parts that are
+not e500-specific.
 
-It would be nice to have what Ctrl-Alt-Del does at the VGA console with 
-PS/2 or USB keyboard. This sends a SIGINT to PID 1, and most distros 
-have this set to do "shutdown -r now" which attempts a clean reboot.
+1. powerpc: make irq_choose_cpu() available to all PIC drivers
+2. powerpc: introduce ePAPR embedded hypervisor hcall interface
+3. powerpc: introduce the ePAPR embedded hypervisor vmpic driver
+4. powerpc: add Freescale hypervisor partition control functions
+5. powerpc/85xx: add board support for the Freescale hypervisor
+6. tty/powerpc: introduce the ePAPR embedded hypervisor byte channel driver
+7. drivers/misc: introduce Freescale hypervisor management driver
 
-Once upon a time there was KeyboardRequest, which would send a SIGWINCH 
-to PID 1 (when pressing Alt-UP_arrow?).  I don't see any sign of this 
-feature in Linux 2.6.32 though.
+Ben Herrenschmidt, please review/ack parts 1-3.
 
-Looking at the Sysrq handlers in the kernel I don't see any keystrokes 
-that send SIGINT to PID 1 either.
+Greg Kroah-Hartman, please review/ack part 6.
 
-So, I'm wondering if it makes sense to add a Sysrq key to send a signal 
-to PID1 ?
+Andrew Morton, please review/ack part 7.
 
--- 
-Coplanar Networks
-http://www.coplanar.net
-(519)489-4903
+Thank you very much for looking at this patchset.  I hope to have it included 
+in 2.6.40.
