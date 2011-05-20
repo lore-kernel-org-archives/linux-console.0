@@ -1,40 +1,44 @@
-From: Alan Cox <alan@lxorguk.ukuu.org.uk>
-Subject: Re: [PATCH 6/7] tty/powerpc: introduce the ePAPR embedded
- hypervisor byte channel driver
-Date: Fri, 20 May 2011 10:54:17 +0100
-Message-ID: <20110520105417.562c7341@lxorguk.ukuu.org.uk>
+From: Kumar Gala <kumar.gala@freescale.com>
+Subject: Re: [PATCH 0/7] This patchset adds support for running Linux under the Freescale hypervisor,
+Date: Fri, 20 May 2011 15:29:08 -0500
+Message-ID: <A221B293-A4DD-4223-AEEA-F3E5243D2C0A@freescale.com>
 References: <1305813272-31826-1-git-send-email-timur@freescale.com>
-	<1305813272-31826-7-git-send-email-timur@freescale.com>
-	<20110519153358.5876f310@lxorguk.ukuu.org.uk>
-	<4DD53FDD.7070503@freescale.com>
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Mime-Version: 1.0 (Apple Message framework v1084)
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 Return-path: <linux-console-owner@vger.kernel.org>
-In-Reply-To: <4DD53FDD.7070503@freescale.com>
+In-Reply-To: <1305813272-31826-1-git-send-email-timur@freescale.com>
 Sender: linux-console-owner@vger.kernel.org
 List-ID: <linux-console.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
 To: Timur Tabi <timur@freescale.com>
-Cc: kumar.gala@freescale.com, benh@kernel.crashing.org, greg@kroah.com, akpm@kernel.org, linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org, linux-console@vger.kernel.org
+Cc: benh@kernel.crashing.org, greg@kroah.com, akpm@kernel.org, linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org, linux-console@vger.kernel.org
 
-On Thu, 19 May 2011 11:05:49 -0500
-Timur Tabi <timur@freescale.com> wrote:
 
-> Alan Cox wrote:
-> >> > +		/* Pass the received data to the tty layer.  Note that this
-> >> > +		 * function calls tty_buffer_request_room(), so I'm not sure if
-> >> > +		 * we should have also called tty_buffer_request_room().
-> >> > +		 */
-> >> > +		ret = tty_insert_flip_string(ttys, buffer, len);
+On May 19, 2011, at 8:54 AM, Timur Tabi wrote:
+
+> have hypervisor extensions (e.g. the P4080 which has an e500mc core).
 > 
-> > You only need to request_room in advance if you can't handle the case
-> > where the insert_flip_string returns less than you stuffed down it.
+> I think it makes sense for this patchset to go through Kumar Gala's -next 
+> branch, but I still need ACKs from various people on the parts that are
+> not e500-specific.
 > 
-> If tty_insert_flip_string() returns less than I stuffed down it, the characters
-> it didn't accept will be dropped.  That's because once I receive them, I have
-> nowhere else to put them.  I suppose I could implement a receive FIFO, but that
-> seems overkill.  If calling tty_buffer_request_room() ensures that
-> tty_insert_flip_string() always accepts all the characters, I would rather do that.
+> 1. powerpc: make irq_choose_cpu() available to all PIC drivers
+> 2. powerpc: introduce ePAPR embedded hypervisor hcall interface
+> 3. powerpc: introduce the ePAPR embedded hypervisor vmpic driver
+> 4. powerpc: add Freescale hypervisor partition control functions
+> 5. powerpc/85xx: add board support for the Freescale hypervisor
+> 6. tty/powerpc: introduce the ePAPR embedded hypervisor byte channel driver
+> 7. drivers/misc: introduce Freescale hypervisor management driver
+> 
+> Ben Herrenschmidt, please review/ack parts 1-3.
+> 
+> Greg Kroah-Hartman, please review/ack part 6.
+> 
+> Andrew Morton, please review/ack part 7.
+> 
+> Thank you very much for looking at this patchset.  I hope to have it included 
+> in 2.6.40.
 
-I was answering the question in the comment in the code...
+Applied to 'test' branch.  (grabbed 'v2' of tty patch).  Fixed merged conflicts.
 
+- k
