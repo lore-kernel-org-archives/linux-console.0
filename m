@@ -1,44 +1,38 @@
-From: Kumar Gala <kumar.gala@freescale.com>
-Subject: Re: [PATCH 0/7] This patchset adds support for running Linux under the Freescale hypervisor,
-Date: Fri, 20 May 2011 15:29:08 -0500
-Message-ID: <A221B293-A4DD-4223-AEEA-F3E5243D2C0A@freescale.com>
+From: Tabi Timur-B04825 <B04825@freescale.com>
+Subject: Re: [PATCH 0/7] This patchset adds support for running Linux under
+ the Freescale hypervisor,
+Date: Mon, 23 May 2011 21:09:07 +0000
+Message-ID: <BANLkTinqOb1UH=keRtZ9=454NDrzcjYV7g@mail.gmail.com>
 References: <1305813272-31826-1-git-send-email-timur@freescale.com>
-Mime-Version: 1.0 (Apple Message framework v1084)
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+ <A221B293-A4DD-4223-AEEA-F3E5243D2C0A@freescale.com>
+Mime-Version: 1.0
+Content-Transfer-Encoding: QUOTED-PRINTABLE
 Return-path: <linux-console-owner@vger.kernel.org>
-In-Reply-To: <1305813272-31826-1-git-send-email-timur@freescale.com>
+In-Reply-To: <A221B293-A4DD-4223-AEEA-F3E5243D2C0A@freescale.com>
+Content-Language: en-US
+Content-ID: <0E853193E336754AA3CD2F381FE36838@freescale.net>
 Sender: linux-console-owner@vger.kernel.org
 List-ID: <linux-console.vger.kernel.org>
-To: Timur Tabi <timur@freescale.com>
-Cc: benh@kernel.crashing.org, greg@kroah.com, akpm@kernel.org, linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org, linux-console@vger.kernel.org
+Content-Type: text/plain; charset="iso-8859-1"
+To: Gala Kumar-B11780 <B11780@freescale.com>
+Cc: Tabi Timur-B04825 <B04825@freescale.com>, "benh@kernel.crashing.org" <benh@kernel.crashing.org>, "greg@kroah.com" <greg@kroah.com>, "akpm@kernel.org" <akpm@kernel.org>, "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>, "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, "linux-console@vger.kernel.org" <linux-console@vger.kernel.org>
 
+On Fri, May 20, 2011 at 3:29 PM, Kumar Gala <kumar.gala@freescale.com> =
+wrote:
 
-On May 19, 2011, at 8:54 AM, Timur Tabi wrote:
+> Applied to 'test' branch. =A0(grabbed 'v2' of tty patch). =A0Fixed me=
+rged conflicts.
 
-> have hypervisor extensions (e.g. the P4080 which has an e500mc core).
-> 
-> I think it makes sense for this patchset to go through Kumar Gala's -next 
-> branch, but I still need ACKs from various people on the parts that are
-> not e500-specific.
-> 
-> 1. powerpc: make irq_choose_cpu() available to all PIC drivers
-> 2. powerpc: introduce ePAPR embedded hypervisor hcall interface
-> 3. powerpc: introduce the ePAPR embedded hypervisor vmpic driver
-> 4. powerpc: add Freescale hypervisor partition control functions
-> 5. powerpc/85xx: add board support for the Freescale hypervisor
-> 6. tty/powerpc: introduce the ePAPR embedded hypervisor byte channel driver
-> 7. drivers/misc: introduce Freescale hypervisor management driver
-> 
-> Ben Herrenschmidt, please review/ack parts 1-3.
-> 
-> Greg Kroah-Hartman, please review/ack part 6.
-> 
-> Andrew Morton, please review/ack part 7.
-> 
-> Thank you very much for looking at this patchset.  I hope to have it included 
-> in 2.6.40.
+I don't think you pushed this branch to git.kernel.org
 
-Applied to 'test' branch.  (grabbed 'v2' of tty patch).  Fixed merged conflicts.
+http://git.kernel.org/?p=3Dlinux/kernel/git/galak/powerpc.git;a=3Dshort=
+log;h=3Drefs/heads/test
 
-- k
+--=20
+Timur Tabi
+Linux kernel developer at Freescale
+--
+To unsubscribe from this list: send the line "unsubscribe linux-console=
+" in
+the body of a message to majordomo@vger.kernel.org
+More majordomo info at  http://vger.kernel.org/majordomo-info.html
