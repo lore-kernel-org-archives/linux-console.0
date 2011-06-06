@@ -1,31 +1,98 @@
-From: Timur Tabi <timur@freescale.com>
+From: Scott Wood <scottwood@freescale.com>
 Subject: Re: [PATCH 7/7] [v2] drivers/misc: introduce Freescale hypervisor
  management driver
-Date: Mon, 6 Jun 2011 11:27:31 -0500
-Message-ID: <4DECFFF3.6060601@freescale.com>
-References: <1306953337-15698-1-git-send-email-timur@freescale.com> <201106061803.58531.arnd@arndb.de> <4DECFBC5.6070205@freescale.com> <201106061824.53844.arnd@arndb.de>
+Date: Mon, 6 Jun 2011 13:15:16 -0500
+Message-ID: <20110606131516.69b9f361@schlenkerla.am.freescale.net>
+References: <1306953337-15698-1-git-send-email-timur@freescale.com>
+	<201106031728.43707.arnd@arndb.de>
+	<20110603112213.4f4d1b4e@schlenkerla.am.freescale.net>
+	<201106061753.10154.arnd@arndb.de>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-console-owner@vger.kernel.org>
-In-Reply-To: <201106061824.53844.arnd@arndb.de>
+In-Reply-To: <201106061753.10154.arnd@arndb.de>
 Sender: linux-console-owner@vger.kernel.org
 List-ID: <linux-console.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
 To: Arnd Bergmann <arnd@arndb.de>
-Cc: Deepak Saxena <dsaxena@linaro.org>, kumar.gala@freescale.com, benh@kernel.crashing.org, greg@kroah.com, akpm@kernel.org, linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org, linux-console@vger.kernel.org, Chris Metcalf <cmetcalf@tilera.com>
+Cc: Timur Tabi <timur@freescale.com>, kumar.gala@freescale.com, linux-kernel@vger.kernel.org, akpm@kernel.org, linux-console@vger.kernel.org, greg@kroah.com, linuxppc-dev@lists.ozlabs.org
 
-Arnd Bergmann wrote:
-> I have no doubt that more of these will come. Chris Metcalf is currently
-> looking for a home for his tilera hypervisor drivers, and we have the
-> microsoft hyperv drivers in drivers/staging, so they will hopefully
-> move to a proper place later. We also have similar drivers in other
-> places, e.g. drivers/ps3/ps3-sys-manager.c, drivers/s390/char/vmcp.c
-> or parts of drivers/xen.
+On Mon, 6 Jun 2011 17:53:09 +0200
+Arnd Bergmann <arnd@arndb.de> wrote:
 
-Alright, drivers/virt it is.  I'll post a v4 once everyone else has had a chance
-to comment on v3.
+> On Friday 03 June 2011, Scott Wood wrote:
+> > On Fri, 3 Jun 2011 17:28:43 +0200
+> > Arnd Bergmann <arnd@arndb.de> wrote:
+> > 
+> > > On Thursday 02 June 2011, Scott Wood wrote:
+> > > > I wanted to have the hypervisor take an update dtb (we already have special
+> > > > meta-properties for things like deletion as part of the hv config
+> > > > mechanism).  But others on the project wanted to keep it simple, and so
+> > > > get/set property it was. :-/
+> > > > 
+> > > > It's unlikely to change at this point without a real need.
+> > > > 
+> > > > As for a filesystem interface, it's not a good match either. 
+> > > > You can't iterate over anything to read out the full tree from the hv.
+> > > 
+> > > kexec iterates over /proc/device-tree to create a dts blob.
+> > 
+> > That's irrelevant, because we're not talking about that device tree.  We're
+> > talking about the device tree of another hypervisor guest.
+> 
+> I understand that it's a different device tree. That doesn't mean we
+> can't use the same tools.
 
--- 
-Timur Tabi
-Linux kernel developer at Freescale
+The kernel does not have the same sort of access to this tree.
+
+> > > > You can't delete anything. 
+> > > 
+> > > rm, rmdir
+> > > 
+> > > > You can't create empty nodes.
+> > > 
+> > > mkdir
+> > 
+> > I know how to operate a filesystem.  You can't do these operations *on
+> > another guest's device tree through the hv interface*.
+> 
+> Why not?
+
+Because the hypervisor does not support it.  It provides only getprop and
+setprop.  I think you took my "you can't do that" statements to be a
+statement about limitations of using a filesystem interfcae -- quite the
+opposite, I was saying the hv functionality is too limited to support a
+filesystem interface with normal semantics.
+
+> > And what would be the benefit of this major restructuring and added
+> > complexity?
+> 
+> I think it would be a slightly better abstraction, and the complexity
+> is not as big as you make it sound. I'm mainly countering your statement
+> that it would be a bad interface or that would not possible to do.
+> 
+> I'm not that opposed to having an ioctl interface for your hypervisor
+> interface, but I am opposed to making design choices based on
+> a bad representations of facts or not having considered the options
+> that other people suggest.
+
+I don't really see how a filesystem is a better abstraction for a wrapper
+around a procedural interface.  A somewhat better argument is that ioctls
+are a pain, and Linux doesn't have a better way to expose a procedural
+interface, that doesn't require a wrapper program -- though as the wrapper
+already exists, and the fs interface would probably be sufficiently awkward
+that people would still use a wrapper, that doesn't buy us too much either.
+
+This is not being proposed as any sort of standard kernel API, just a way
+for userspace to get access to implementation-specific hcalls.
+Implementation-specific backdoor is practically the definition of ioctl. :-)
+
+I would be interested to see a concrete proposal for what this would look
+like as a filesystem, though, based on the actual operations that are
+available.  How would you deal with getting all the parameters in,
+performing the operation, and getting the results back?  What about when
+multiple processes are doing this at the same time?  What would the memcpy
+hcall look like?
+
+-Scott
 
