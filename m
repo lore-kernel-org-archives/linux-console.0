@@ -1,36 +1,26 @@
-From: Timur Tabi <timur@freescale.com>
-Subject: Re: [PATCH 7/7] [v4] drivers/virt: introduce Freescale hypervisor
- management driver
-Date: Thu, 9 Jun 2011 15:24:27 -0500
-Message-ID: <4DF12BFB.5030102@freescale.com>
-References: <1307573154-15838-1-git-send-email-timur@freescale.com> <201106090929.23671.arnd@arndb.de> <4DF11715.5030001@freescale.com> <201106092220.22246.arnd@arndb.de>
+From: Arnd Bergmann <arnd@arndb.de>
+Subject: Re: [PATCH 7/7] [v5] drivers/virt: introduce Freescale hypervisor management driver
+Date: Thu, 9 Jun 2011 22:25:07 +0200
+Message-ID: <201106092225.08090.arnd@arndb.de>
+References: <1307646794-26374-1-git-send-email-timur@freescale.com> <4DF12345.1040409@freescale.com> <4DF123AA.6070402@oracle.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-console-owner@vger.kernel.org>
-In-Reply-To: <201106092220.22246.arnd@arndb.de>
+In-Reply-To: <4DF123AA.6070402@oracle.com>
 Sender: linux-console-owner@vger.kernel.org
 List-ID: <linux-console.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, alan@lxorguk.ukuu.org.uk, kumar.gala@freescale.com, benh@kernel.crashing.org, greg@kroah.com, akpm@kernel.org, cmetcalf@tilera.com, konrad.wilk@oracle.com, linux-console@vger.kernel.org
+Content-Type: Text/Plain; charset="us-ascii"
+To: linuxppc-dev@lists.ozlabs.org
+Cc: Randy Dunlap <randy.dunlap@oracle.com>, Timur Tabi <timur@freescale.com>, konrad.wilk@oracle.com, kumar.gala@freescale.com, linux-kernel@vger.kernel.org, cmetcalf@tilera.com, akpm@kernel.org, dsaxena@linaro.org, linux-console@vger.kernel.org, greg@kroah.com, virtualization@lists.linux-foundation.org, alan@lxorguk.ukuu.org.uk
 
-Arnd Bergmann wrote:
-> The lesson to learn here is obviously not to ship binaries of applications
-> to customers before the driver has been merged in a mainline kernel.
+On Thursday 09 June 2011 21:48:58 Randy Dunlap wrote:
+> > So is it okay to stick with 0, or do I need to pick a new number?
+> 
+> I wasn't suggesting that you change the 0, just note that it has conflicts,
+> like other ioctls do.
 
-Believe me, I know this, but unfortunately I have no control over every aspect
-of our development cycle.
+We normally don't try to maintain binary compatibility with out of tree
+kernel patches. That only leads to inferior interfaces finding their way
+into the kernel.
 
-> The best way out that I can see is to make the driver carry the proper
-> interface in the upstream version, but to have a private patch to support
-> both interface versions in the kernel you ship on machines that require
-> backwards compatibility. Once you have phased out the user application,
-> you can then drop that patch and use the upstream version of the
-> interfaces.
-
-I think I can make that work.
-
--- 
-Timur Tabi
-Linux kernel developer at Freescale
-
+	Arnd
