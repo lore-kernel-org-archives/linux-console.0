@@ -1,66 +1,48 @@
 From: Arnd Bergmann <arnd@arndb.de>
-Subject: Re: [PATCH 7/7] [v4] drivers/virt: introduce Freescale hypervisor management driver
-Date: Thu, 9 Jun 2011 09:29:23 +0200
-Message-ID: <201106090929.23671.arnd@arndb.de>
+Subject: Re: [PATCH 7/7] [v4] drivers/virt: introduce Freescale hypervisor
+	management driver
+Date: Thu, 9 Jun 2011 09:38:22 +0200
+Message-ID: <201106090938.23027.arnd@arndb.de>
 References: <1307573154-15838-1-git-send-email-timur@freescale.com>
+	<20110608161009.7b05d305.randy.dunlap@oracle.com>
 Mime-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Return-path: <linux-console-owner@vger.kernel.org>
-In-Reply-To: <1307573154-15838-1-git-send-email-timur@freescale.com>
-Sender: linux-console-owner@vger.kernel.org
-List-ID: <linux-console.vger.kernel.org>
-Content-Type: Text/Plain; charset="us-ascii"
-To: linuxppc-dev@lists.ozlabs.org
-Cc: Timur Tabi <timur@freescale.com>, alan@lxorguk.ukuu.org.uk, kumar.gala@freescale.com, benh@kernel.crashing.org, greg@kroah.com, akpm@kernel.org, cmetcalf@tilera.com, konrad.wilk@oracle.com, dsaxena@linaro.org, linux-kernel@vger.kernel.org, linux-console@vger.kernel.org
+Return-path: <linuxppc-dev-bounces+glppe-linuxppc-embedded-2=m.gmane.org@lists.ozlabs.org>
+In-Reply-To: <20110608161009.7b05d305.randy.dunlap@oracle.com>
+List-Id: <linux-console.vger.kernel.org>
+List-Unsubscribe: <https://lists.ozlabs.org/options/linuxppc-dev>,
+	<mailto:linuxppc-dev-request@lists.ozlabs.org?subject=unsubscribe>
+List-Archive: <http://lists.ozlabs.org/pipermail/linuxppc-dev>
+List-Post: <mailto:linuxppc-dev@lists.ozlabs.org>
+List-Help: <mailto:linuxppc-dev-request@lists.ozlabs.org?subject=help>
+List-Subscribe: <https://lists.ozlabs.org/listinfo/linuxppc-dev>,
+	<mailto:linuxppc-dev-request@lists.ozlabs.org?subject=subscribe>
+Errors-To: linuxppc-dev-bounces+glppe-linuxppc-embedded-2=m.gmane.org@lists.ozlabs.org
+Sender: linuxppc-dev-bounces+glppe-linuxppc-embedded-2=m.gmane.org@lists.ozlabs.org
+To: linuxppc-dev@lists.ozlabs.org, Linux Virtualization <virtualization@lists.linux-foundation.org>
+Cc: Randy Dunlap <randy.dunlap@oracle.com>, konrad.wilk@oracle.com, greg@kroah.com, kumar.gala@freescale.com, linux-kernel@vger.kernel.org, cmetcalf@tilera.com, akpm@kernel.org, dsaxena@linaro.org, linux-console@vger.kernel.org, Timur Tabi <timur@freescale.com>, alan@lxorguk.ukuu.org.uk
 
-On Thursday 09 June 2011 00:45:54 Timur Tabi wrote:
-> +struct fsl_hv_ioctl_memcpy {
-> +       __u32 ret;
-> +       __u32 source;
-> +       __u32 target;
-> +       __u64 local_vaddr;
-> +       __u64 remote_paddr;
-> +       __u64 count;
-> +};
+On Thursday 09 June 2011 01:10:09 Randy Dunlap wrote:
+> On Wed, 8 Jun 2011 17:45:54 -0500 Timur Tabi wrote:
+> 
+> > Add the drivers/virt directory, which houses drivers that support
+> > virtualization environments, and add the Freescale hypervisor management
+> > driver.
+> 
+> It can't go in linux/virt or linux/virt/fsl instead?  why drivers/ ?
+> 
+> or maybe linux/virt should be drivers/virt ?
 
-> +struct fsl_hv_ioctl_prop {
-> +       __u32 ret;
-> +       __u32 handle;
-> +       __u64 path;
-> +       __u64 propname;
-> +       __u64 propval;
-> +       __u32 proplen;
-> +};
+See discussion for v2 of this patch. I suggested that drivers/firmware and virt/
+as options, the counterarguments were that drivers/firmware is for passive
+firmware as opposed to firmware that acts as a hypervisor, and that virt/ is
+for the host side of hypervisors like kvm, not for guests.
 
-These structures have implied padding. Better make it explicit by
-adding the appropriate __u32 __pad1 members or similar.
-
-> +/*
-> + * ioctl commands.
-> + */
-> +enum {
-> +       FSL_HV_IOCTL_PARTITION_RESTART = 1, /* Boot another partition */
-> +       FSL_HV_IOCTL_PARTITION_GET_STATUS = 2, /* Boot another partition */
-> +       FSL_HV_IOCTL_PARTITION_START = 3, /* Boot another partition */
-> +       FSL_HV_IOCTL_PARTITION_STOP = 4, /* Stop this or another partition */
-> +       FSL_HV_IOCTL_MEMCPY = 5, /* Copy data from one partition to another */
-> +       FSL_HV_IOCTL_DOORBELL = 6, /* Ring a doorbell */
-> +
-> +       /* Get a property from another guest's device tree */
-> +       FSL_HV_IOCTL_GETPROP = 7,
-> +
-> +       /* Set a property in another guest's device tree */
-> +       FSL_HV_IOCTL_SETPROP = 8,
-> +};
-
-As discussed before, this one should really be using the _IOC macros to define
-the commands that you use based on the structure definitions above, e.g.
-
-#define FSL_HV_IOCTL_GETPROP _IORW(FSL_HV, 8, struct fsl_hv_ioctl_prop)
-
-Then get rid of all the code that takes apart the ioctl command numbers
-again and just do a switch/case based on the command.
-
-	Arnd
+The driver in here most closely resembles the xen dom0 model, where a
+priviledged guest controls other guests, but unlike xen there is a single
+driver file, so there is no need to have drivers/fsl-hv directory just
+for this one file. We do have a number of other hypervisors that fit in the
+same category, so they can be added here later.
 
 	Arnd
