@@ -1,26 +1,36 @@
-From: Arnd Bergmann <arnd@arndb.de>
-Subject: Re: [PATCH 7/7] [v5] drivers/virt: introduce Freescale hypervisor management driver
-Date: Thu, 9 Jun 2011 22:25:07 +0200
-Message-ID: <201106092225.08090.arnd@arndb.de>
-References: <1307646794-26374-1-git-send-email-timur@freescale.com> <4DF12345.1040409@freescale.com> <4DF123AA.6070402@oracle.com>
+From: Greg KH <greg@kroah.com>
+Subject: Re: [PATCH 7/7] [v5] drivers/virt: introduce Freescale hypervisor
+ management driver
+Date: Thu, 9 Jun 2011 13:31:17 -0700
+Message-ID: <20110609203117.GB14235@kroah.com>
+References: <1307646794-26374-1-git-send-email-timur@freescale.com>
+ <201106092213.13755.arnd@arndb.de>
+ <4DF12A94.6070605@freescale.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
 Return-path: <linux-console-owner@vger.kernel.org>
-In-Reply-To: <4DF123AA.6070402@oracle.com>
+DKIM-Signature: v=1; a=rsa-sha1; c=relaxed/relaxed; d=messagingengine.com; h=date:from:to:cc:subject:message-id:references:mime-version:content-type:in-reply-to; s=smtpout; bh=d+z7VJIKbi/eNRN9q+tP73z4n68=; b=jERuf1ofkFgnQNKeD/rQQ/pXCM97YnqPDxjXk9XVkvXPUZDVRVim0ZKlctIiMcYQumPPtKppvy8fu7K1inwOC16zhHXBpwuCBMMyQk+cc/rPrYRmrcK5Z2ezMG0YdsI3dqH+0fDxhN6qkH1J1zr22ivFPLNRF8QyBFFvw9Zm7t0=
+Content-Disposition: inline
+In-Reply-To: <4DF12A94.6070605@freescale.com>
 Sender: linux-console-owner@vger.kernel.org
 List-ID: <linux-console.vger.kernel.org>
-Content-Type: Text/Plain; charset="us-ascii"
-To: linuxppc-dev@lists.ozlabs.org
-Cc: Randy Dunlap <randy.dunlap@oracle.com>, Timur Tabi <timur@freescale.com>, konrad.wilk@oracle.com, kumar.gala@freescale.com, linux-kernel@vger.kernel.org, cmetcalf@tilera.com, akpm@kernel.org, dsaxena@linaro.org, linux-console@vger.kernel.org, greg@kroah.com, virtualization@lists.linux-foundation.org, alan@lxorguk.ukuu.org.uk
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+To: Timur Tabi <timur@freescale.com>
+Cc: Arnd Bergmann <arnd@arndb.de>, linuxppc-dev@lists.ozlabs.org, alan@lxorguk.ukuu.org.uk, kumar.gala@freescale.com, benh@kernel.crashing.org, akpm@kernel.org, cmetcalf@tilera.com, konrad.wilk@oracle.com, linux-kernel@vger.kernel.org, linux-console@vger.kernel.org, virtualization@lists.linux-foundation.org
 
-On Thursday 09 June 2011 21:48:58 Randy Dunlap wrote:
-> > So is it okay to stick with 0, or do I need to pick a new number?
+On Thu, Jun 09, 2011 at 03:18:28PM -0500, Timur Tabi wrote:
+> > More importantly, the code you have chose (0) conflicts with existing drivers
+> > (frame buffer, scsi and wavefront among others). Please chose a free one and
+> > add it to Documentation/ioctl/ioctl-number.txt in the same patch.
 > 
-> I wasn't suggesting that you change the 0, just note that it has conflicts,
-> like other ioctls do.
+> Ok, I was really hoping to avoid doing this.  Like I said, binary compatibility
+> is important, and changing the type will break my existing apps.  Are you
+> insisting that I pick a new number?
 
-We normally don't try to maintain binary compatibility with out of tree
-kernel patches. That only leads to inferior interfaces finding their way
-into the kernel.
+Why is binary compatibility important?  Isn't this a brand new driver
+for a brand new system?  What userspace tools are out there in the wild
+for such a thing?
 
-	Arnd
+confused,
+
+greg k-h
