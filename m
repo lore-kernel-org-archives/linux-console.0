@@ -1,36 +1,52 @@
-From: Arnd Bergmann <arnd@arndb.de>
-Subject: Re: [PATCH 7/7] [v6] drivers/virt: introduce Freescale hypervisor management driver
-Date: Thu, 9 Jun 2011 23:04:55 +0200
-Message-ID: <201106092304.55479.arnd@arndb.de>
-References: <1307652726-4356-1-git-send-email-timur@freescale.com>
+From: "David Laight" <David.Laight@ACULAB.COM>
+Subject: RE: [PATCH 7/7] [v5] drivers/virt: introduce Freescale hypervisormanagement driver
+Date: Fri, 10 Jun 2011 09:32:08 +0100
+Message-ID: <AE90C24D6B3A694183C094C60CF0A2F6D8AD8B@saturn3.aculab.com>
+References: <201106092213.13755.arnd@arndb.de>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8BIT
 Return-path: <linux-console-owner@vger.kernel.org>
-In-Reply-To: <1307652726-4356-1-git-send-email-timur@freescale.com>
+Content-class: urn:content-classes:message
+In-Reply-To: <201106092213.13755.arnd@arndb.de>
 Sender: linux-console-owner@vger.kernel.org
 List-ID: <linux-console.vger.kernel.org>
-Content-Type: Text/Plain; charset="us-ascii"
-To: virtualization@lists.linux-foundation.org
-Cc: Timur Tabi <timur@freescale.com>, alan@lxorguk.ukuu.org.uk, kumar.gala@freescale.com, benh@kernel.crashing.org, greg@kroah.com, akpm@kernel.org, cmetcalf@tilera.com, konrad.wilk@oracle.com, dsaxena@linaro.org, linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org, linux-console@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+To: Arnd Bergmann <arnd@arndb.de>, Timur Tabi <timur@freescale.com>, linuxppc-dev@lists.ozlabs.org
+Cc: konrad.wilk@oracle.com, kumar.gala@freescale.com, linux-kernel@vger.kernel.org, cmetcalf@tilera.com, akpm@kernel.org, linux-console@vger.kernel.org, greg@kroah.com, virtualization@lists.linux-foundation.org, alan@lxorguk.ukuu.org.uk
 
-On Thursday 09 June 2011 22:52:06 Timur Tabi wrote:
-> Add the drivers/virt directory, which houses drivers that support
-> virtualization environments, and add the Freescale hypervisor management
-> driver.
+ 
+> > +enum fsl_hv_ioctl_cmd {
+> > +       FSL_HV_IOCTL_PARTITION_RESTART = _IOWR(0, 1, struct
+fsl_hv_ioctl_restart),
+...
+> > +};
 > 
-> The Freescale hypervisor management driver provides several services to
-> drivers and applications related to the Freescale hypervisor:
-> 
-> 1. An ioctl interface for querying and managing partitions
-> 
-> 2. A file interface to reading incoming doorbells
-> 
-> 3. An interrupt handler for shutting down the partition upon receiving the
->    shutdown doorbell from a manager partition
-> 
-> 4. A kernel interface for receiving callbacks when a managed partition
->    shuts down.
-> 
-> Signed-off-by: Timur Tabi <timur@freescale.com>
+> Using a #define here is usually preferred because then you 
+> can use #ifdef in a user application to check if a given
+> value has been assigned.
 
-Acked-by: Arnd Bergmann <arnd@arndb.de>
+It is also possible to add:
+#define FSL_HV_IOCTL_PARTITION_RESTART FSL_HV_IOCTL_PARTITION_RESTART
+to have much the same effect.
+But there are many cases where #defines are better.
+I only tend to use enums when the constanst are beting generated
+by the expansion of a #define.
+
+> More importantly, the code you have chose (0) conflicts with 
+> existing drivers (frame buffer, scsi and wavefront among others).
+> Please chose a free one and
+> add it to Documentation/ioctl/ioctl-number.txt in the same patch.
+
+It is rather a PITA that, when 'int' went from 16 to 32 bits, the
+BSD people used the high 16 bits for size/flags rather than
+using the extra bits to help make ioctl's unique.
+Linux seems to have copied BSD here - rather than SYSV.
+
+One problem with clashing ioctl commands is when systems like
+NetBSD are running linux binaries and need to translate ioctl
+buffers to/from native format. If the ioctl commands are
+unique this can be done much more easily.
+
+	David
+
+
