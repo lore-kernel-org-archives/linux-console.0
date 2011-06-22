@@ -1,35 +1,35 @@
-From: Arnd Bergmann <arnd@arndb.de>
-Subject: Re: [PATCH 7/7] [v4] drivers/virt: introduce Freescale hypervisor management driver
-Date: Fri, 10 Jun 2011 17:36:14 +0200
-Message-ID: <201106101736.14850.arnd@arndb.de>
-References: <1307573154-15838-1-git-send-email-timur@freescale.com> <201106090938.23027.arnd@arndb.de> <4DF22770.4010103@tilera.com>
-Mime-Version: 1.0
+From: Kumar Gala <kumar.gala@freescale.com>
+Subject: Re: [PATCH 1/7] powerpc: make irq_choose_cpu() available to all PIC drivers
+Date: Wed, 22 Jun 2011 06:41:26 -0500
+Message-ID: <9215F3F9-AA0A-4C76-B2F0-DF18A9FAAB35@freescale.com>
+References: <1305813272-31826-1-git-send-email-timur@freescale.com> <1305813272-31826-2-git-send-email-timur@freescale.com>
+Mime-Version: 1.0 (Apple Message framework v1084)
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-console-owner@vger.kernel.org>
-In-Reply-To: <4DF22770.4010103@tilera.com>
+In-Reply-To: <1305813272-31826-2-git-send-email-timur@freescale.com>
 Sender: linux-console-owner@vger.kernel.org
 List-ID: <linux-console.vger.kernel.org>
-Content-Type: Text/Plain; charset="us-ascii"
-To: Chris Metcalf <cmetcalf@tilera.com>
-Cc: linuxppc-dev@lists.ozlabs.org, Linux Virtualization <virtualization@lists.linux-foundation.org>, Randy Dunlap <randy.dunlap@oracle.com>, Timur Tabi <timur@freescale.com>, konrad.wilk@oracle.com, kumar.gala@freescale.com, linux-kernel@vger.kernel.org, akpm@kernel.org, dsaxena@linaro.org, linux-console@vger.kernel.org, greg@kroah.com, alan@lxorguk.ukuu.org.uk
+To: Timur Tabi <timur@freescale.com>
+Cc: benh@kernel.crashing.org, greg@kroah.com, akpm@kernel.org, linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org, linux-console@vger.kernel.org
 
-On Friday 10 June 2011, Chris Metcalf wrote:
-> This still leaves open the question of what really should go in this new
-> directory. Is it just for drivers that manage/control the hypervisor?  Or
-> is it also for drivers that just use the hypervisor to do I/O of some kind,
-> but aren't related to any other "family" of drivers, i.e., a driver that
-> would have been dumped in drivers/char or drivers/misc in the old days?
+
+On May 19, 2011, at 8:54 AM, Timur Tabi wrote:
+
+> From: Stuart Yoder <stuart.yoder@freescale.com>
 > 
-> My specific interest at the moment is the proposed tile-srom.c driver
-> (https://patchwork.kernel.org/patch/843892/), which uses a simple
-> hypervisor read/write API to access the portion of the SPI ROM used to hold
-> the boot stream for a TILE processor.
+> Move irq_choose_cpu() into arch/powerpc/kernel/irq.c so that it can be used
+> by other PIC drivers.  The function is not MPIC-specific.
+> 
+> Signed-off-by: Stuart Yoder <stuart.yoder@freescale.com>
+> Signed-off-by: Timur Tabi <timur@freescale.com>
+> ---
+> arch/powerpc/include/asm/irq.h |    2 ++
+> arch/powerpc/kernel/irq.c      |   35 +++++++++++++++++++++++++++++++++++
+> arch/powerpc/sysdev/mpic.c     |   36 ------------------------------------
+> 3 files changed, 37 insertions(+), 36 deletions(-)
 
-I'd still put that driver in drivers/char for now, because it already contains
-similar drivers. We can probaby group them in a subdirectory of drivers/char
-at some point or move them out to a new directory.
+applied to next
 
-For your raw hcall passthrough driver, that would be something that should
-go into drivers/virt/ IMHO.
+- k
 
-	Arnd
