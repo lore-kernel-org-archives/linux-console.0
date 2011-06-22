@@ -1,14 +1,14 @@
 From: Kumar Gala <kumar.gala@freescale.com>
-Subject: Re: [PATCH 2/7] powerpc: introduce ePAPR embedded hypervisor hcall interface
-Date: Wed, 22 Jun 2011 06:41:34 -0500
-Message-ID: <A51DF224-1AB1-43CA-8880-253D7FD837B5@freescale.com>
-References: <1305813272-31826-1-git-send-email-timur@freescale.com> <1305813272-31826-3-git-send-email-timur@freescale.com>
+Subject: Re: [PATCH 5/7] powerpc/85xx: add board support for the Freescale hypervisor
+Date: Wed, 22 Jun 2011 06:42:00 -0500
+Message-ID: <5853C1C3-ADAF-4F6E-A675-F4DEF7162B38@freescale.com>
+References: <1305813272-31826-1-git-send-email-timur@freescale.com> <1305813272-31826-6-git-send-email-timur@freescale.com>
 Mime-Version: 1.0 (Apple Message framework v1084)
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 8BIT
-Return-path: <linux-kernel-owner@vger.kernel.org>
-In-Reply-To: <1305813272-31826-3-git-send-email-timur@freescale.com>
-Sender: linux-kernel-owner@vger.kernel.org
+Return-path: <linux-console-owner@vger.kernel.org>
+In-Reply-To: <1305813272-31826-6-git-send-email-timur@freescale.com>
+Sender: linux-console-owner@vger.kernel.org
 List-ID: <linux-console.vger.kernel.org>
 To: Timur Tabi <timur@freescale.com>
 Cc: benh@kernel.crashing.org, greg@kroah.com, akpm@kernel.org, linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org, linux-console@vger.kernel.org
@@ -16,26 +16,17 @@ Cc: benh@kernel.crashing.org, greg@kroah.com, akpm@kernel.org, linuxppc-dev@list
 
 On May 19, 2011, at 8:54 AM, Timur Tabi wrote:
 
-> ePAPR hypervisors provide operating system services via a "hypercall"
-> interface.  The following steps need to be performed to make an hcall:
-> 
-> 1. Load r11 with the hcall number
-> 2. Load specific other registers with parameters
-> 3. Issue instrucion "sc 1"
-> 4. The return code is in r3
-> 5. Other returned parameters are in other registers.
-> 
-> To provide this service to the kernel, these steps are wrapped in inline
-> assembly functions.  Standard ePAPR hcalls are in epapr_hcalls.h, and Freescale
-> extensions are in fsl_hcalls.h.
+> Add support for the ePAPR-compliant Freescale hypervisor (aka "Topaz") on the
+> Freescale P3041DS, P4080DS, and P5020DS reference boards.
 > 
 > Signed-off-by: Timur Tabi <timur@freescale.com>
 > ---
-> arch/powerpc/include/asm/epapr_hcalls.h |  502 +++++++++++++++++++++++
-> arch/powerpc/include/asm/fsl_hcalls.h   |  655 +++++++++++++++++++++++++++++++
-> 2 files changed, 1157 insertions(+), 0 deletions(-)
-> create mode 100644 arch/powerpc/include/asm/epapr_hcalls.h
-> create mode 100644 arch/powerpc/include/asm/fsl_hcalls.h
+> arch/powerpc/platforms/85xx/Kconfig      |    3 +++
+> arch/powerpc/platforms/85xx/corenet_ds.c |    7 +++++++
+> arch/powerpc/platforms/85xx/p3041_ds.c   |   16 +++++++++++++++-
+> arch/powerpc/platforms/85xx/p4080_ds.c   |   29 ++++++++++++++++-------------
+> arch/powerpc/platforms/85xx/p5020_ds.c   |   16 +++++++++++++++-
+> 5 files changed, 56 insertions(+), 15 deletions(-)
 
 applied to next
 
