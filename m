@@ -1,36 +1,42 @@
-From: Kumar Gala <kumar.gala@freescale.com>
-Subject: Re: [PATCH 4/7] powerpc: add Freescale hypervisor partition control functions
-Date: Wed, 22 Jun 2011 06:41:52 -0500
-Message-ID: <CC6FDFDC-FB47-495E-B998-5D1CD115AA2D@freescale.com>
-References: <1305813272-31826-1-git-send-email-timur@freescale.com> <1305813272-31826-5-git-send-email-timur@freescale.com>
-Mime-Version: 1.0 (Apple Message framework v1084)
-Content-Type: text/plain; charset="us-ascii"
+From: Timur Tabi <timur@freescale.com>
+Subject: Re: [PATCH 6/7] [v2] tty/powerpc: introduce the ePAPR embedded hypervisor
+ byte channel driver
+Date: Wed, 22 Jun 2011 10:23:32 -0500
+Message-ID: <4E0208F4.4030800@freescale.com>
+References: <1305830092-20104-1-git-send-email-timur@freescale.com>
+Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
-Return-path: <linux-kernel-owner@vger.kernel.org>
-In-Reply-To: <1305813272-31826-5-git-send-email-timur@freescale.com>
-Sender: linux-kernel-owner@vger.kernel.org
+Return-path: <linux-console-owner@vger.kernel.org>
+In-Reply-To: <1305830092-20104-1-git-send-email-timur@freescale.com>
+Sender: linux-console-owner@vger.kernel.org
 List-ID: <linux-console.vger.kernel.org>
-To: Timur Tabi <timur@freescale.com>
-Cc: benh@kernel.crashing.org, greg@kroah.com, akpm@kernel.org, linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org, linux-console@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+To: kumar.gala@freescale.com, benh@kernel.crashing.org, greg@kroah.com, akpm@kernel.org, linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org, linux-console@vger.kerne
 
-
-On May 19, 2011, at 8:54 AM, Timur Tabi wrote:
-
-> Add functions to restart and halt the current partition when running under
-> the Freescale hypervisor.  These functions should be assigned to various
-> function pointers of the ppc_md structure during the .probe() function for
-> the board:
+Timur Tabi wrote:
+> The ePAPR embedded hypervisor specification provides an API for "byte
+> channels", which are serial-like virtual devices for sending and receiving
+> streams of bytes.  This driver provides Linux kernel support for byte
+> channels via three distinct interfaces:
 > 
-> 	ppc_md.restart = fsl_hv_restart;
-> 	ppc_md.power_off = fsl_hv_halt;
-> 	ppc_md.halt = fsl_hv_halt;
+> 1) An early-console (udbg) driver.  This provides early console output
+> through a byte channel.  The byte channel handle must be specified in a
+> Kconfig option.
+> 
+> 2) A normal console driver.  Output is sent to the byte channel designated
+> for stdout in the device tree.  The console driver is for handling kernel
+> printk calls.
+> 
+> 3) A tty driver, which is used to handle user-space input and output.  The
+> byte channel used for the console is designated as the default tty.
 > 
 > Signed-off-by: Timur Tabi <timur@freescale.com>
-> ---
-> arch/powerpc/sysdev/fsl_soc.c |   27 +++++++++++++++++++++++++++
-> arch/powerpc/sysdev/fsl_soc.h |    3 +++
-> 2 files changed, 30 insertions(+), 0 deletions(-)
 
-applied to next
+I know you guys are busy, but can I get an ACK or two on this patch, if there
+are no issues with it?  It's the only one of the seven that doesn't have one.  I
+think v2 has addressed all of the concerns raised on version 1.
 
-- k
+-- 
+Timur Tabi
+Linux kernel developer at Freescale
+
