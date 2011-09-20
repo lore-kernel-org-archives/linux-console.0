@@ -1,58 +1,77 @@
-From: Tabi Timur-B04825 <B04825@freescale.com>
-Subject: Re: [PATCH] [v3] tty/powerpc: introduce the ePAPR embedded
- hypervisor byte channel driver
-Date: Fri, 22 Jul 2011 19:00:40 +0000
-Message-ID: <CAOZdJXVD6=UizQjgNK-rJm2hDpZG+Gupo6+M3wW-VS7O1rTo_Q@mail.gmail.com>
-References: <1310169972-13756-1-git-send-email-timur@freescale.com>
+From: Timur Tabi <timur@freescale.com>
+Subject: [PATCH] drivers/tty: don't use the byte channel handle as a parameter in ehv_bytechan.c
+Date: Tue, 20 Sep 2011 13:26:57 -0500
+Message-ID: <1316543217-13769-1-git-send-email-timur@freescale.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: QUOTED-PRINTABLE
 Return-path: <linux-console-owner@vger.kernel.org>
-In-Reply-To: <1310169972-13756-1-git-send-email-timur@freescale.com>
-Content-Language: en-US
-Content-ID: <45E7DC55A0B7F24986E4B3504547FDD2@freescale.net>
 Sender: linux-console-owner@vger.kernel.org
 List-ID: <linux-console.vger.kernel.org>
-Content-Type: text/plain; charset="iso-8859-1"
-To: "greg@kroah.com" <greg@kroah.com>
-Cc: "linuxppc-dev@ozlabs.org" <linuxppc-dev@ozlabs.org>, "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, "linux-console@vger.kernel.org" <linux-console@vger.kernel.org>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+To: greg@kroah.com, linux-kernel@vger.kernel.org, linuxppc-dev@ozlabs.org, linux-console@vger.kernel.org
 
-On Fri, Jul 8, 2011 at 7:06 PM, Timur Tabi <timur@freescale.com> wrote:
-> The ePAPR embedded hypervisor specification provides an API for "byte
-> channels", which are serial-like virtual devices for sending and rece=
-iving
-> streams of bytes. =A0This driver provides Linux kernel support for by=
-te
-> channels via three distinct interfaces:
->
-> 1) An early-console (udbg) driver. =A0This provides early console out=
-put
-> through a byte channel. =A0The byte channel handle must be specified =
-in a
-> Kconfig option.
->
-> 2) A normal console driver. =A0Output is sent to the byte channel des=
-ignated
-> for stdout in the device tree. =A0The console driver is for handling =
-kernel
-> printk calls.
->
-> 3) A tty driver, which is used to handle user-space input and output.=
- =A0The
-> byte channel used for the console is designated as the default tty.
->
-> Signed-off-by: Timur Tabi <timur@freescale.com>
-> ---
+The ePAPR hypervisor byte channel console driver only supports one byte
+channel as a console, and the byte channel handle is stored in a global
+variable.  It doesn't make any sense to pass that handle as a parameter
+to the console functions, since these functions already have access to the
+global variable.
 
-Greg,
+This change also fixes this compilation warning on a 64-bit kernel:
 
-I just want to make sure you haven't forgotten this patch.  Will you
-be picking it up for 3.1?
+  CC      drivers/tty/ehv_bytechan.o
+drivers/tty/ehv_bytechan.c: In function 'ehv_bc_console_write':
+drivers/tty/ehv_bytechan.c:289:24: warning: cast from pointer to integer of different size
+drivers/tty/ehv_bytechan.c: In function 'ehv_bc_console_init':
+drivers/tty/ehv_bytechan.c:355:24: warning: cast to pointer from integer of different size
 
---=20
-Timur Tabi
-Linux kernel developer at Freescale
---
-To unsubscribe from this list: send the line "unsubscribe linux-console=
-" in
-the body of a message to majordomo@vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
+This warning is because the driver is converting the integer byte channel
+handle to/from the void* 'data' field of struct console.  Rather than fix
+the warning, we just eliminate the code altogether.
+
+Signed-off-by: Timur Tabi <timur@freescale.com>
+---
+ drivers/tty/ehv_bytechan.c |    7 ++-----
+ 1 files changed, 2 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/tty/ehv_bytechan.c b/drivers/tty/ehv_bytechan.c
+index e67f70b..b24e6f7 100644
+--- a/drivers/tty/ehv_bytechan.c
++++ b/drivers/tty/ehv_bytechan.c
+@@ -286,7 +286,6 @@ static int ehv_bc_console_byte_channel_send(unsigned int handle, const char *s,
+ static void ehv_bc_console_write(struct console *co, const char *s,
+ 				 unsigned int count)
+ {
+-	unsigned int handle = (unsigned int)co->data;
+ 	char s2[EV_BYTE_CHANNEL_MAX_BYTES];
+ 	unsigned int i, j = 0;
+ 	char c;
+@@ -299,14 +298,14 @@ static void ehv_bc_console_write(struct console *co, const char *s,
+ 
+ 		s2[j++] = c;
+ 		if (j >= (EV_BYTE_CHANNEL_MAX_BYTES - 1)) {
+-			if (ehv_bc_console_byte_channel_send(handle, s2, j))
++			if (ehv_bc_console_byte_channel_send(stdout_bc, s2, j))
+ 				return;
+ 			j = 0;
+ 		}
+ 	}
+ 
+ 	if (j)
+-		ehv_bc_console_byte_channel_send(handle, s2, j);
++		ehv_bc_console_byte_channel_send(stdout_bc, s2, j);
+ }
+ 
+ /*
+@@ -352,8 +351,6 @@ static int __init ehv_bc_console_init(void)
+ 			   CONFIG_PPC_EARLY_DEBUG_EHV_BC_HANDLE);
+ #endif
+ 
+-	ehv_bc_console.data = (void *)stdout_bc;
+-
+ 	/* add_preferred_console() must be called before register_console(),
+ 	   otherwise it won't work.  However, we don't want to enumerate all the
+ 	   byte channels here, either, since we only care about one. */
+-- 
+1.7.3.4
+
+
