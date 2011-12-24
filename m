@@ -1,39 +1,52 @@
-From: Tabi Timur-B04825 <B04825@freescale.com>
-Subject: Re: [PATCH] drivers/tty: don't use the byte channel handle as a
- parameter in ehv_bytechan.c
-Date: Fri, 23 Sep 2011 01:11:55 +0000
-Message-ID: <4E7BDCDA.6060506@freescale.com>
-References: <1316543217-13769-1-git-send-email-timur@freescale.com>
- <20110922230640.GA16981@kroah.com> <4E7BC1A9.5050708@freescale.com>
- <20110922232828.GA12088@kroah.com>
+From: Andrey Utkin <andrey.krieger.utkin@gmail.com>
+Subject: Need advice on performant text-mode output API
+Date: Sat, 24 Dec 2011 17:57:56 +0200
+Message-ID: <CANZNk83+t1GVES4DpVk7ZXuVv=YyFfVNGeV1RtzAkNkcn7VM3Q@mail.gmail.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7BIT
 Return-path: <linux-console-owner@vger.kernel.org>
-In-Reply-To: <20110922232828.GA12088@kroah.com>
-Content-Language: en-US
-Content-ID: <C5C7C787C50EC349BFDFC774FFB5C123@freescale.net>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=gamma;
+        h=mime-version:date:message-id:subject:from:to:content-type;
+        bh=8XNEF6BSw07rVT33/7ewpmcGfw6b7UlspdMit/Gjl8c=;
+        b=mWwwP18jDLBFWP0kODS8OeV+MBL+m/onzSglTcPkRtvq92+QXkpPVMYTZnUvOEvIoO
+         vxujU7cv8WaaKqKo34kedHiTNWFheAG8ScyA42VUWT/5kcxt0dYrwXZiMlUy4hc/Zdlu
+         X50IZemBNyfWxFFLgVGmr7TeymG/KuGludPMA=
 Sender: linux-console-owner@vger.kernel.org
 List-ID: <linux-console.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: Greg KH <greg@kroah.com>
-Cc: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, "linuxppc-dev@ozlabs.org" <linuxppc-dev@ozlabs.org>, "linux-console@vger.kernel.org" <linux-console@vger.kernel.org>
+Content-Transfer-Encoding: 7bit
+To: linux-console@vger.kernel.org
 
-Greg KH wrote:
->>> >  >  This patch doesn't apply at all to my tty tree, what was it made
->>> >  >  against?
->> >
->> >  An internal repository that supposed to be in-sync with the latest and greatest.
->> >
->> >  What's the URL for your tty-next repo?
-> There is no public one due to kernel.org being down.
->
-> Does your patch apply to linux-next?
+Hi. I develop the program that visualizes disk checking process.
+Similarly to known DOS program, MHDD.
+To get the idea, you can find screencasts of its usage on Youtube.
+Or look at my program's screenshot:
+http://cloud.github.com/downloads/krieger-od/whdd/whdd_screenshot5.png
+So i need to update big zone at left, and stats in top right corner.
+The point is that it can be ~1000 blocks processed per second,
+although it is ok to render them each Nth time, like at each 10-50
+blocks processed.
+Currently i use ncurses, and its performance is unacceptable, the
+screen blinks awfully, because it prints whole screen of chars on
+refresh.
 
-It does not, and I see why now.  Looks like the internal tree is not in 
-sync after all.
+I ask for directing me to any sufficiently performant libs/API, to
+replace ncurses.
+It would be ok, and even nice, if it is plain text mode (80x25, 16
+colors), without any overhead of representing my chars as graphical
+points.
+It would be _very_ nice, if that API provide 'windows' model in terms
+of ncurses, to work with rectangular pieces.
+No OS portability is required. Linux only is sufficient.
+Terminal emulator support is of course not required, although i'm
+interested: is it possible to have.
 
-I will post a V2 shortly.
+I've found some project - directfb, but i'm not sure if it fits best
+for my purpose. It seems to be focused on rich graphic rendering
+possibilities. I need stupid, but fast text mode. Similar thing about
+SDL.
+
+Any help is appreciated. Thanks.
 
 -- 
-Timur Tabi
-Linux kernel developer at Freescale
+Andrey Utkin
