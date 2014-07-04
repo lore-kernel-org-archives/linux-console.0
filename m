@@ -1,69 +1,42 @@
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Subject: Re: console / fbdev: fbcon support for bits_per_pixel = 1?
-Date: Sun, 15 Jun 2014 10:57:48 +0200
-Message-ID: <CAMuHMdXMWFXG99iiuk1j=0DaQbWbmcpGxaTfDNX8o+Dz7MH7aw@mail.gmail.com>
-References: <539C1C1F.5060904@biereigel.de>
-	<20140614143550.59367463@neptune.home>
+From: Kewal Agola <kewalagola@gmail.com>
+Subject: Trouble with Virtual Terminal
+Date: Fri, 4 Jul 2014 13:14:41 +0530
+Message-ID: <CAOsdogr5WZh3XNndEgBhPQxmD6waSbWGk2d-T-C-9dVbYB5JZg@mail.gmail.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: QUOTED-PRINTABLE
 Return-path: <linux-console-owner@vger.kernel.org>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20120113;
-        h=mime-version:sender:in-reply-to:references:date:message-id:subject
-         :from:to:cc:content-type:content-transfer-encoding;
-        bh=JLVWejUkzK5iut6EHuqyt2SHBsbGznR0v8RPR9RQg20=;
-        b=jwvhqFpNdxrJh26V+mQxkuiI6V1EEbFakOJWXikoGHbvwSz8GWzKx87ytTr9SYZGCw
-         o/PNV2hrPNyRLrhy9jBqyoE9iSBwJQ0rJxcP9+cZeUm9z+Y5uLkArvQaHvpxQsPF1Y2b
-         g05QIOyZYrixyKMeSceiPxnUiNv21zlKNBsLBW+XR4wGYX/IaOLamBUD0TkPVC2T+nci
-         14eCZ2YWXU3o+FiMZgMCmSEA3ZZa6GRpfsGHKuTnHVywWP0ElpT27ZxxrzQPBdUdYMVa
-         +5qCTQIZdNFYhxRX+YP6vgRoU52fK9tOrx4ZnhmBBnGqPY4QtOpGfCcXGzBi4Z5b07b7
-         xmnw==
-In-Reply-To: <20140614143550.59367463@neptune.home>
+        h=mime-version:date:message-id:subject:from:to:content-type;
+        bh=42SVfxlyhZqmmVH0aNIC1tnkdoGKKHvZEDtgUwf7TRI=;
+        b=bGLdTpSpmkmTT1P1mervNu2UhIN8jEcqqocEQ6M8guVbFPkZtSBPARa0S+msK0DVdc
+         TNiwMUK4b824ulIjWld2tMt6eva29mt9+hA3PhcvSMIfpEiLLaL0fnf2X/Buk/2zEHES
+         xQ/yMRSAKi67BOljLSFhyJKZX7O+rHm422MaTReunUN5Mo6yjOn1T5tCYgZcCWb1NMB5
+         7pCylNyXg4Dmlmdm1zrlSj/E1h2yCGkqWmoReRw/qZBps3UyWELIZ4UP1dhODC83pkZl
+         NLBohdePW8UsseYTqSjCFdDyV93qlB/S6lxJneDgHW0Bc8H74lOUEPjcG1I0BzTYDYYW
+         H0Eg==
 Sender: linux-console-owner@vger.kernel.org
 List-ID: <linux-console.vger.kernel.org>
-Content-Type: text/plain; charset="macroman"
-To: =?UTF-8?Q?Bruno_Pr=C3=A9mont?= <bonbons@linux-vserver.org>
-Cc: Stefan Biereigel <stefan@biereigel.de>, Linux Fbdev development list <linux-fbdev@vger.kernel.org>, "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, linux-console@vger.kernel.org, brian <brian.fonfara@gmx.de>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+To: linux-console@vger.kernel.org
 
-On Sat, Jun 14, 2014 at 2:35 PM, Bruno Pr=C3=A9mont
-<bonbons@linux-vserver.org> wrote:
->> Is this behavior intended or are we triggering a bug here (that no o=
-ne noticed, because
->> who in the world uses monochrome framebuffers these days..). I can't=
- see any comments that
->> monochrome consoles should not work with 1 bit per pixel. See the co=
-de below if you spot
->> some errors (ignore some missing error handling and mediocre style f=
-or now, please).
->
-> fbcon on 1bpp frambuffer worked for me with picoLCD (though I have fo=
-und no userspace
+Hi,
 
-I'm not aware of 1 bpp frame buffer consoles being broken.
+I am using a customized ARM based platform with an LCD monitor. I am
+having trouble with virtual terminal. Terminal emulator with X-serve
+works fine. But as soon as I switch to virtual terminal (ctrl + alt +
+F1), the characters get scrambled. If I type character 'a', at first
+character 'a' looks as if it were written with a broken line,
+gradually after few seconds proper shape comes up. If I enter command
+"dmesg" the output looks garbled due to overlapping of two consecutive
+lines.
 
-> framebuffer application willing to operate at 1bpp).
+Processor Family : ARMv7.
+Linux Kernel version : 3.0.31
+Operating system : ARM Ubuntu.
 
-Xfbdev does. I revived support for monochrome (and Atari/Amiga-style
-bitplanes) last year.
+I know there is some issue with display driver. But I do not know what
+changes could help me. Can someone suggest me the way out?
 
-And of course
-https://git.kernel.org/cgit/linux/kernel/git/geert/fbtest.git/
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-=
-m68k.org
-
-In personal conversations with technical people, I call myself a hacker=
-=2E But
-when I'm talking to journalists I just say "programmer" or something li=
-ke that.
-                                -- Linus Torvalds
---
-To unsubscribe from this list: send the line "unsubscribe linux-console=
-" in
-the body of a message to majordomo@vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
+Thanks,
+Kewal
