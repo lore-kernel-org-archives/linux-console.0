@@ -1,77 +1,63 @@
-From: Renaud Barbier <renaud.barbier@ge.com>
-Subject: ttySx probing
-Date: Fri, 26 Jun 2015 14:44:22 +0100
-Message-ID: <558D5736.2080904@ge.com>
+From: =?UTF-8?B?TWljaGHFgg==?= Pecio <michal.pecio@gmail.com>
+Subject: AltGr leaks keypresses to VT on which X is running
+Date: Wed, 26 Apr 2017 16:50:43 +0200
+Message-ID: <20170426165043.6f33563c@gmail.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: QUOTED-PRINTABLE
+Content-Transfer-Encoding: quoted-printable
 Return-path: <linux-console-owner@vger.kernel.org>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:subject:message-id:mime-version
+         :content-transfer-encoding;
+        bh=PajSDClUKMPXU0ottbYBE/VEhxhWscKRg1kIM8ijPIo=;
+        b=jS50m7xfqNcI34jIcWMDDg83fdeYr/nCJ1xjZizMm2c08fjJOpe9HWwrIq2PkePoxd
+         l4yR1Y5VCM24TX7nUQSmE9H///lEFo1NrituEy4JfX/uoEHSoZi0ANuDWw0LmSaHPsBa
+         HC4qOzoBS7O3srlbZFauoSID2aJmsd/WgZ78/KRw4grF6YzvVb9eOastwqRI4Qj1P0NS
+         AbFlrrIAuNWB4gqKika3P6eViRUMHrHFAqs2fUbZGIY5ZEPS1v2UwCBYjTLsRy4zIY+d
+         iu8YAoqS1AQdDZXFk6Ijr0cSqxraR5XFTCutSCMldg0jKNk6CGwh9fVh4kNmwdIgPHrD
+         H3SA==
 Sender: linux-console-owner@vger.kernel.org
 List-ID: <linux-console.vger.kernel.org>
 Content-Type: text/plain; charset="utf-8"
 To: linux-console@vger.kernel.org
 
-Hello,
-I have a Freescale P1014 custom board with the UARTs connected as follo=
-ws:
-UART0 -> BMM (Board management device connected to sensors) ttyS0 11520=
-0
-bauds
-UART1 -> Not used. Disable in the device tree.
-UART2 -> Console. ttyS1 - 9600 bauds
-UART3 -> Not used. ttyS2
+Hi,
 
-I am using Linux 3.14
-The bootargs specifices console=3DttyS1,9600n8
-I have two issues:
+I recently observed this odd behavior:
 
-When booting a few lines of garbage characters are printed when ttyS0 i=
-s
-probed.
-serial=C2=AAr=C3=92=C3=92=C2=A2=C3=91=C3=A5M=C3=85=C3=91yS0 at MMIO 0xf=
-fe04500 (irq =3D 42, base_baud =3D 20833333)
-is a 165
-=C3=91=C3=9155%=3D=C3=81=C3=A1=C3=A1=C3=81=C3=91=C3=9D=C3=81=C3=81=C3=91=
-=C2=A1=C2=A5=C3=89=C3=85=C3=89=C3=B5=C3=91=C3=89=C2=B1=C3=B5=C2=B1
-=C3=8D=C3=8D}=C2=BD=C2=B9=C3=8D=C3=8D=C2=BD=C2=B9=C3=8D=C3=8D=C2=BD=C2=B1=
-m=C3=95=C3=95=C3=91=C2=B9=C2=B9 loaded
-=C2=B15)=C2=BD=C2=BD=C3=91=C2=BD=C2=B9=C3=8D=C3=8D=C2=BD=C2=B1m=C3=95=C3=
-=95=C3=8D=C3=8D
-5)=C2=BD=C2=BD=C3=91=C3=91
-=2E..
-Later the system reached the prompt.
+I login as root on tty3 and run
 
-These type of character also appears when setting UART0 to  9600/115200
-bauds in the boot loader or not programming the speed at  all.
+loadkeys pl # like US QWERTY but AltGr changes a->=C4=85 c->=C4=87 etc.
+echo        # only typed, not actually executed with ENTER
 
-This does not happen when  UART0 is disabled in the device tree.
+Now the last line shows the incomplete command:
 
-I do not understand why Linux would attempt to use ttyS0 when the
-console is specified as ttyS1. Is there a way to prevent this behaviour=
-?
+$ echo=20
 
+Then I login on tty1 and run
 
-Next, if I do not program  a baud rate in UART0 from the boot loader an=
-d
-use for instance the command stty -F /dev/ttyS0. There is an interrupt
-flood and Linux hangs. The same happen when using the tools accessing
-the BMM. No character seems to be transmitted or received.
-Note that I need to spent for time gathering data on this issue.
+Xorg :0 vt3
 
+which displays Xorg on vt3. Inside Xorg, while holding AltGr, I hit
+every letter in order: qwerty...asdf...zxc..
 
-I am looking for a way to solve the first issue. I was thinking to get
-ttyS1 (UART2) to be probed first and see whether that would prevent
-these characters from being printed or any other possible solution to
-test. Though, I am  not sure how this can be accomplished after looking
-at boot argument controlling console access or changing the device tree=
-=2E
+Then I kill Xorg and switch to vt3. Now the last line shows:
 
-I would appreciate any suggestions.
+$ echo =C4=99=C4=85=C5=9B=C5=82=C5=BC=C5=BA=C5=84
 
-Cheers,
-Renaud
+These are all AltGr-generated Polish letters _except_ =C3=B3 (AltGr+o).
+No idea what's so special about =C3=B3. Pressing ENTER runs echo which
+really prints this string.
 
---
-To unsubscribe from this list: send the line "unsubscribe linux-console=
-" in
-the body of a message to majordomo@vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
+Similar thing happens with German ('de') console layout. X layout seems
+irrelevant.
+
+It only happens if I first hold AltGr and then press a letter, not the
+other way around.
+
+Inside Xorg, all keys are processed correctly.
+
+I'm not sure if it's a kernel bug, X bug or something "expected"?
+
+Thanks,
+Michal
