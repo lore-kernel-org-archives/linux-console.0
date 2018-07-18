@@ -1,51 +1,41 @@
 From: Adam Borowski <kilobyte@angband.pl>
-Subject: [PATCH 0/6] vt: no blinking on console, 256/24-bit color improvements
-Date: Wed, 18 Jul 2018 05:01:52 +0200
-Message-ID: <20180718030152.kdq53mwpdfusvwl5@angband.pl>
-Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Subject: [PATCH 3/6] vt: let \e[100m use bright background if unblinking
+Date: Wed, 18 Jul 2018 05:03:24 +0200
+Message-ID: <20180718030327.579-3-kilobyte@angband.pl>
+References: <20180718030152.kdq53mwpdfusvwl5@angband.pl>
+ <20180718030327.579-1-kilobyte@angband.pl>
 Return-path: <linux-kernel-owner@vger.kernel.org>
-Content-Disposition: inline
+In-Reply-To: <20180718030327.579-1-kilobyte@angband.pl>
 Sender: linux-kernel-owner@vger.kernel.org
 List-ID: <linux-console.vger.kernel.org>
-Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Jiri Slaby <jslaby@suse.com>, linux-console@vger.kernel.org, Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>, linux-fbdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: Adam Borowski <kilobyte@angband.pl>
 
-Hi!
-Here's a patchset with two entangled improvements:
+Let's keep \e[5m setting this bit, it's a nice way to convey the
+information, and it preserves old behaviour.  Some other terminals
+that can't or don't want to blink do so as well.
 
-* it'd be good to get rid of blinking where possible.  Even CGA (thus VGA)
-  allows disabling it, rendering such characters with a bright background
-  instead.
-* due to my error, 256-color mode uses a much darker palette for conversion,
-  resulting in behaving inconsistently with 24-bit mode.
+Signed-off-by: Adam Borowski <kilobyte@angband.pl>
+---
+ drivers/tty/vt/vt.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-The new code uses bright backgrounds when possible, enabled with \e[100m or
-\e[48;m.
-
-Despite the whole idea following a VGA capability, this patchset doesn't
-change vgacon yet, just fbcon.  The reason being: ~80% of x86 users have an
-nVidia chip, which means nouveau or nvidia-proprietary.  Nouveau implies
-fbcon, nvidia-proprietary fails to properly restore text flags (as evidenced
-by 512 glyph mode turning to 256 on switch from graphics).  You don't care
-about the proprietary driver, but let's not break it pointlessly, and as
-both nVidia cards I own work only with nouveau, I don't want to touch what I
-can't test.
-
-Thus, let's enable unblinking on fbcon for now.  We can flip that bit (in
-register 0x10) later.
-
-This fixes the display of catimg and similar tools.
-
-
-Diffstat:
- drivers/tty/vt/vt.c              | 56 +++++++++++++++++++++++++++++---------------------------
- drivers/video/fbdev/core/fbcon.c |  1 +
- include/linux/console_struct.h   |  4 ++--
- 3 files changed, 32 insertions(+), 29 deletions(-)
-
+diff --git a/drivers/tty/vt/vt.c b/drivers/tty/vt/vt.c
+index 45057bbf6f74..4096093c8cd2 100644
+--- a/drivers/tty/vt/vt.c
++++ b/drivers/tty/vt/vt.c
+@@ -1709,6 +1709,8 @@ static void csi_m(struct vc_data *vc)
+ 			if (vc->vc_par[i] >= 90 && vc->vc_par[i] <= 107) {
+ 				if (vc->vc_par[i] < 100)
+ 					vc->vc_intensity = 2;
++				else if (vc->vc_unblinking)
++					vc->vc_blink = 1;
+ 				vc->vc_par[i] -= 60;
+ 			}
+ 			if (vc->vc_par[i] >= 30 && vc->vc_par[i] <= 37)
 -- 
-⢀⣴⠾⠻⢶⣦⠀ 
-⣾⠁⢠⠒⠀⣿⡁ A dumb species has no way to open a tuna can.
-⢿⡄⠘⠷⠚⠋⠀ A smart species invents a can opener.
-⠈⠳⣄⠀⠀⠀⠀ A master species delegates.
+2.18.0
+
