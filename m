@@ -1,7 +1,7 @@
 From: Adam Borowski <kilobyte@angband.pl>
-Subject: [PATCH 5/6] vt: compensate for brightening the 256-color palette
-Date: Wed, 18 Jul 2018 05:03:26 +0200
-Message-ID: <20180718030327.579-5-kilobyte@angband.pl>
+Subject: [PATCH 4/6] vt: change 256-color palette to match all(?) modern terminals
+Date: Wed, 18 Jul 2018 05:03:25 +0200
+Message-ID: <20180718030327.579-4-kilobyte@angband.pl>
 References: <20180718030152.kdq53mwpdfusvwl5@angband.pl>
  <20180718030327.579-1-kilobyte@angband.pl>
 Return-path: <linux-kernel-owner@vger.kernel.org>
@@ -14,51 +14,42 @@ Content-Transfer-Encoding: 7bit
 To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Jiri Slaby <jslaby@suse.com>, linux-console@vger.kernel.org, Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>, linux-fbdev@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc: Adam Borowski <kilobyte@angband.pl>
 
-The algorithm for 256-to-16 conversion was designed with wrong input
-palette but actually tuned on mainstream GUI terminals.  This resulted in
-something that works well only for data we convert ourselves (ie, 256 not
-24-bit).
+Turns out that osso-xterm which I based upon uses something a lot different
+from apparently any other terminal -- they all use identical shades, much
+brighter than what I copied:
 
-As the change is non-linear, I did not bother replicating it exactly, thus
-there are some differences, among others:
-* values very close to black go to 0 (black) rather than 8 (dark grey)
-* grayscale ramp is more even
+    Old: 00 2a 55 7f aa d4
+    New: 00 5f 87 af d7 ff
 
-A comparison of the old vs new vs FreeBSD's teken is at:
-https://github.com/kilobyte/colorkernel
+This did hardly matter as we immediately shoehorn the colors into only 16
+values, but recently 24-bit codes turned from an oddity to something
+widespread, thus it's better to handle 256 vs 24-bit consistently.
 
 Signed-off-by: Adam Borowski <kilobyte@angband.pl>
 ---
- drivers/tty/vt/vt.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ drivers/tty/vt/vt.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/tty/vt/vt.c b/drivers/tty/vt/vt.c
-index 8c61caafdf3c..c777f4c91df0 100644
+index 4096093c8cd2..8c61caafdf3c 100644
 --- a/drivers/tty/vt/vt.c
 +++ b/drivers/tty/vt/vt.c
-@@ -1559,17 +1559,17 @@ static void rgb_foreground(struct vc_data *vc, const struct rgb *c)
- {
- 	u8 hue = 0, max = max3(c->r, c->g, c->b);
- 
--	if (c->r > max / 2)
-+	if (c->r > max / 2 + 32)
- 		hue |= 4;
--	if (c->g > max / 2)
-+	if (c->g > max / 2 + 32)
- 		hue |= 2;
--	if (c->b > max / 2)
-+	if (c->b > max / 2 + 32)
- 		hue |= 1;
- 
--	if (hue == 7 && max <= 0x55) {
-+	if (hue == 7 && max <= 0x70) {
- 		hue = 0;
- 		vc->vc_intensity = 2;
--	} else if (max > 0xaa)
-+	} else if (max > 0xc0)
- 		vc->vc_intensity = 2;
- 	else
- 		vc->vc_intensity = 1;
+@@ -1545,9 +1545,12 @@ static void rgb_from_256(int i, struct rgb *c)
+ 		c->g = i&2 ? 0xff : 0x55;
+ 		c->b = i&4 ? 0xff : 0x55;
+ 	} else if (i < 232) {   /* 6x6x6 colour cube. */
+-		c->r = (i - 16) / 36 * 85 / 2;
+-		c->g = (i - 16) / 6 % 6 * 85 / 2;
+-		c->b = (i - 16) % 6 * 85 / 2;
++		int r = (i - 16) / 36;
++		int g = (i - 16) / 6 % 6;
++		int b = (i - 16) % 6;
++		c->r = r ? r * 0x28 + 0x37 : 0;
++		c->g = g ? g * 0x28 + 0x37 : 0;
++		c->b = b ? b * 0x28 + 0x37 : 0;
+ 	} else                  /* Grayscale ramp. */
+ 		c->r = c->g = c->b = i * 10 - 2312;
+ }
 -- 
 2.18.0
 
