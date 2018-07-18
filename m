@@ -1,95 +1,96 @@
 From: Nicolas Pitre <nicolas.pitre@linaro.org>
-Subject: Re: [PATCH v3 0/3] have the vt console preserve unicode characters
-Date: Tue, 17 Jul 2018 21:00:08 -0400 (EDT)
-Message-ID: <nycvar.YSQ.7.76.1807172055140.11681@knanqh.ubzr>
-References: <20180627035642.8561-1-nicolas.pitre@linaro.org> <20180628123803.GA22045@kroah.com>
-Mime-Version: 1.0
+Subject: [PATCH 2/3] vt: coherence validation code for the unicode screen buffer
+Date: Tue, 17 Jul 2018 21:02:41 -0400
+Message-ID: <20180718010242.5254-3-nicolas.pitre@linaro.org>
+References: <20180718010242.5254-1-nicolas.pitre@linaro.org>
 Return-path: <linux-kernel-owner@vger.kernel.org>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:in-reply-to:message-id:references
-         :user-agent:mime-version;
-        bh=rKWWvqr4cxMXVLm0gybOjFfTfp/ZwNWw7784lzBuK9U=;
-        b=Enqyesqn21m+hDxu6t6Uj+IKAZYSPY1O7vCrol63SQFnvHx/Eu4319U5ABt2xqu2ML
-         rg0nL1lrGfUjQWAYF01h51sbg8p3Cmifbpuk5xOEK/GuOS1W3HmT2Fcz9tnd7rXGdKqZ
-         GiGGlKIlL7HbhFCJvKKsykLIRGmAgr1FDPtzI=
-In-Reply-To: <20180628123803.GA22045@kroah.com>
+DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=pobox.com; h=from:to:cc
+        :subject:date:message-id:in-reply-to:references; s=sasl; bh=Z9a3
+        /MBdtj9jXUeSkq/yeCQ5zso=; b=DETh6RmjmbiGozGx70xavXS/vISp7hoKMcdN
+        SSwgrzVOGCWo7CcZ5AWuKRsm2iJhxFx9v6fMgndBJB/ez/WFVXMQkxjiRrLKLgN0
+        aYPxt/w8MmjkxHZrv2uAthC8oSsILwzvJwzNd2Xtq0E4ow0oXgQ0myQ0veEf1xxV
+        o/0aRKc=
+In-Reply-To: <20180718010242.5254-1-nicolas.pitre@linaro.org>
 Sender: linux-kernel-owner@vger.kernel.org
 List-ID: <linux-console.vger.kernel.org>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Dave Mielke <Dave@mielke.cc>, Samuel Thibault <samuel.thibault@ens-lyon.org>, Adam Borowski <kilobyte@angband.pl>, Alan Cox <gnomes@lxorguk.ukuu.org.uk>, linux-kernel@vger.kernel.org, linux-console@vger.kernel.org
+Cc: Kees Cook <keescook@chromium.org>, Geert Uytterhoeven <geert@linux-m68k.org>, Adam Borowski <kilobyte@angband.pl>, Dave Mielke <Dave@mielke.cc>, Samuel Thibault <samuel.thibault@ens-lyon.org>, linux-kernel@vger.kernel.org, linux-console@vger.kernel.org
 
-On Thu, 28 Jun 2018, Greg Kroah-Hartman wrote:
+Make sure the unicode screen buffer matches the video screen content.
+This is provided for debugging convenience and disabled by default.
 
-> On Tue, Jun 26, 2018 at 11:56:39PM -0400, Nicolas Pitre wrote:
-> > The vt code translates UTF-8 strings into glyph index values and stores 
-> > those glyph values in the screen buffer. Because there can only be at 
-> > most 512 glyphs at the moment, it is impossible to represent most 
-> > unicode characters, in which case a default glyph (often '?') is 
-> > displayed instead. The original unicode value is then lost.
-> > 
-> > The 512-glyph limitation is inherent to text-mode VGA displays after 
-> > which the core console code was modelled. This also means that the 
-> > /dev/vcs* devices only provide user space with glyph index values, and 
-> > then user applications must get hold of the unicode-to-glyph table the 
-> > kernel is using in order to back-translate those into actual characters. 
-> > It is not possible to get back the original unicode value when multiple 
-> > unicode characters map to the same glyph, especially for the vast 
-> > majority that maps to the default replacement glyph.
-> > 
-> > Users of /dev/vcs* shouldn't have to be restricted to a narrow unicode 
-> > space from lossy screen content because of that. This is especially true 
-> > for accessibility applications such as BRLTTY that rely on /dev/vcs to 
-> > render screen content onto braille terminals.
-> > 
-> > It was also argued that the VGA-centric glyph buffer should eventually 
-> > go entirely. The current design made sense when hardware was slow and 
-> > managing the screen directly into the VGA memory made a difference (i.e. 
-> > 25 years ago). Modern console display drivers no longer have to be 
-> >    limited to 512 glyphs.
-> > Quoting Alan Cox:
-> > 
-> > |The only driver that it suits is the VGA text mode driver, which at 
-> > |2GHz+ is going to be fast enough whatever format you convert from. We 
-> > |have the memory, the processor power and the fact almost all our 
-> > |displays are bitmapped (or more complex still) all in favour of 
-> > |throwing away that limit.
-> > 
-> > This patch series introduces unicode screen support to the core console 
-> > code with /dev/vcs* as a first user. Memory is allocated, and possible 
-> > CPU overhead introduced, only if /dev/vcsu is read at least once. For 
-> > now both the glyph and unicode buffers are maintained in parallel to 
-> > allow for a smooth transition.
-> > 
-> > I'm a prime user of this new /dev/vcsu interface, as well as the BRLTTY 
-> > maintainer Dave Mielke who implemented support for this in BRLTTY. There 
-> > is therefore a vested interest in maintaining this feature as necessary. 
-> > And this received extensive testing as well at this point.
-> > 
-> > This is also available on top of v4.18-rc2 here:
-> > 
-> >   git://git.linaro.org/people/nicolas.pitre/linux vt-unicode
-> > 
-> > Changes from v2:
-> > 
-> > - Dropped patch #4 as it was useful only for initial debugging and it 
-> >   attracted all the review comments so far -- actually more than the 
-> >   patch is worth.
-> 
-> If you want this "feature" back, I'll be glad to take it, as odds are it
-> will help when any future person wants to test any changes in the code.
-> 
-> So feel free to resend it, I have no objection to it as-is.
-> 
-> And I've queued the other 3 up now, nice job.
+Signed-off-by: Nicolas Pitre <nico@linaro.org>
+---
+ drivers/tty/vt/vt.c | 39 +++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 39 insertions(+)
 
-Thanks!
+diff --git a/drivers/tty/vt/vt.c b/drivers/tty/vt/vt.c
+index 03e79f7787..331f175265 100644
+--- a/drivers/tty/vt/vt.c
++++ b/drivers/tty/vt/vt.c
+@@ -328,6 +328,8 @@ void schedule_console_callback(void)
+ #define get_vc_uniscr(vc) vc->vc_uni_screen
+ #endif
+ 
++#define VC_UNI_SCREEN_DEBUG 0
++
+ typedef uint32_t char32_t;
+ 
+ /*
+@@ -571,6 +573,42 @@ void vc_uniscr_copy_line(struct vc_data *vc, void *dest, int viewed,
+ 	}
+ }
+ 
++/* this is for validation and debugging only */
++static void vc_uniscr_debug_check(struct vc_data *vc)
++{
++	struct uni_screen *uniscr = get_vc_uniscr(vc);
++	unsigned short *p;
++	int x, y, mask;
++
++	if (!VC_UNI_SCREEN_DEBUG || !uniscr)
++		return;
++
++	WARN_CONSOLE_UNLOCKED();
++
++	/*
++	 * Make sure our unicode screen translates into the same glyphs
++	 * as the actual screen. This is brutal indeed.
++	 */
++	p = (unsigned short *)vc->vc_origin;
++	mask = vc->vc_hi_font_mask | 0xff;
++	for (y = 0; y < vc->vc_rows; y++) {
++		char32_t *line = uniscr->lines[y];
++		for (x = 0; x < vc->vc_cols; x++) {
++			u16 glyph = scr_readw(p++) & mask;
++			char32_t uc = line[x];
++			int tc = conv_uni_to_pc(vc, uc);
++			if (tc == -4)
++				tc = conv_uni_to_pc(vc, 0xfffd);
++			if (tc == -4)
++				tc = conv_uni_to_pc(vc, '?');
++			if (tc != glyph)
++				pr_err_ratelimited(
++					"%s: mismatch at %d,%d: glyph=%#x tc=%#x\n",
++					__func__, x, y, glyph, tc);
++		}
++	}
++}
++
+ 
+ static void con_scroll(struct vc_data *vc, unsigned int t, unsigned int b,
+ 		enum con_scroll dir, unsigned int nr)
+@@ -2719,6 +2757,7 @@ static int do_con_write(struct tty_struct *tty, const unsigned char *buf, int co
+ 		do_con_trol(tty, vc, orig);
+ 	}
+ 	con_flush(vc, draw_from, draw_to, &draw_x);
++	vc_uniscr_debug_check(vc);
+ 	console_conditional_schedule();
+ 	console_unlock();
+ 	notify_update(vc);
+-- 
+2.17.1
 
-I'm about to send 3 more patches to put on top of what you already have: 
-patch #1 is that debugging code (still disabled by default), patch #2 
-removes the VLA, and patch #3 updates devices.txt.
-
-
-Nicolas
