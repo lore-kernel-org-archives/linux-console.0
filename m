@@ -1,56 +1,34 @@
-From: Nicolas Pitre <nicolas.pitre@linaro.org>
-Subject: Re: [PATCH 0/3] use unicode for vt mouse paste
-Date: Tue, 17 Jul 2018 23:10:27 -0400 (EDT)
-Message-ID: <nycvar.YSQ.7.76.1807172304250.11681@knanqh.ubzr>
-References: <20180718020604.3u25omf5fxqvsy3q@angband.pl>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Subject: Re: [PATCH 3/3] vt: add /dev/vcsu* to devices.txt
+Date: Wed, 18 Jul 2018 09:25:14 +0200
+Message-ID: <CAMuHMdUB4DvxGv6ogcm9UiV-4BHZHWKyGwSPsGELMru7D9dHaQ@mail.gmail.com>
+References: <20180718010242.5254-1-nicolas.pitre@linaro.org> <20180718010242.5254-4-nicolas.pitre@linaro.org>
 Mime-Version: 1.0
 Return-path: <linux-kernel-owner@vger.kernel.org>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:in-reply-to:message-id:references
-         :user-agent:mime-version;
-        bh=0njeVzpI+WBn7bnpgyaDKXzdgTRSqbdTxvAoehO9lj4=;
-        b=BsK67wG0jrFg8wadTm2lBp+ETQRyTpd+gBuEMqnYkcFXTbyxWvk06lwqAmYTcmA8PW
-         Zw6nmmoPY0IMUM8W61b78hHai00nVyiZsifrlA+C7Y0IKcSary2NIrmBM4gHPT9fr1pL
-         5SOa/3YffRrNqzkf0VlkHHWK9wFyAcZZh9hnE=
-In-Reply-To: <20180718020604.3u25omf5fxqvsy3q@angband.pl>
+In-Reply-To: <20180718010242.5254-4-nicolas.pitre@linaro.org>
 Sender: linux-kernel-owner@vger.kernel.org
 List-ID: <linux-console.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-To: Adam Borowski <kilobyte@angband.pl>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Jiri Slaby <jslaby@suse.com>, linux-kernel@vger.kernel.org, linux-console@vger.kernel.org
+To: Nicolas Pitre <nicolas.pitre@linaro.org>
+Cc: Greg KH <gregkh@linuxfoundation.org>, Kees Cook <keescook@chromium.org>, Adam Borowski <kilobyte@angband.pl>, Dave Mielke <Dave@mielke.cc>, Samuel Thibault <samuel.thibault@ens-lyon.org>, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, linux-console@vger.kernel.org
 
-On Wed, 18 Jul 2018, Adam Borowski wrote:
+On Wed, Jul 18, 2018 at 3:02 AM Nicolas Pitre <nicolas.pitre@linaro.org> wrote:
+> Also mention that the traditional devices provide glyph values whereas
+> /dev/vcsu* is unicode based.
+>
+> Suggested-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> Signed-off-by: Nicolas Pitre <nico@linaro.org>
 
-> Hi!
-> Based on Nicolas' nice work (in tty-next), let's avoid corrupting characters
-> that have been copy+pasted via mouse selection.  The uniscr array holds
-> their original identity even if they got mangled by glyph conversion.
-> The glyph conversion lossily turns similar-looking characters into a
-> representation, and everyone else into a replacement character.
-> 
-> There's no proper handling for CJK (yet?) but anything of wcwidth()==1 will
-> work fine.
-> 
-> The whole thing doesn't get enabled until something reads from /dev/vcsu for
-> that console, but let's test this code first before enabling it widely.
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-Glad to see this. For the whole set you may add:
+Gr{oetje,eeting}s,
 
-Acked-by: Nicolas Pitre <nico@linaro.org>
+                        Geert
 
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-> Diffstat:
->  drivers/tty/vt/selection.c | 48 +++++++++++++++++++++++++++++-------------------
->  drivers/tty/vt/vt.c        | 10 ++++++++++
->  include/linux/selection.h  |  1 +
->  3 files changed, 40 insertions(+), 19 deletions(-)
-> 
-> 
-> -- 
-> // If you believe in so-called "intellectual property", please immediately
-> // cease using counterfeit alphabets.  Instead, contact the nearest temple
-> // of Amon, whose priests will provide you with scribal services for all
-> // your writing needs, for Reasonable And Non-Discriminatory prices.
-> 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
