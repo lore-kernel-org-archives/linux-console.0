@@ -1,36 +1,35 @@
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Subject: Re: [PATCH 0/6] vt: no blinking on console, 256/24-bit color improvements
-Date: Thu, 19 Jul 2018 16:34:28 +0200
-Message-ID: <CAMuHMdXGY9YMwXiEm=Jn=rv6WW0V9P0k7DFZ-5BE4Smu7YzMgg@mail.gmail.com>
-References: <20180718030152.kdq53mwpdfusvwl5@angband.pl> <20180719114749.00a7f979@alans-desktop>
- <20180719142844.u3u4p7tywb54y4yd@angband.pl>
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH v2 1/3] vt: avoid a VLA in the unicode screen scroll
+ function
+Date: Sat, 21 Jul 2018 09:20:43 +0200
+Message-ID: <20180721072043.GA26449@kroah.com>
+References: <20180718010242.5254-1-nicolas.pitre@linaro.org>
+ <20180718010242.5254-2-nicolas.pitre@linaro.org>
+ <20180718014813.ygcbgqxk4yo3ydbl@angband.pl>
+ <nycvar.YSQ.7.76.1807172155070.11681@knanqh.ubzr>
+ <nycvar.YSQ.7.76.1807182353560.2327@knanqh.ubzr>
 Mime-Version: 1.0
 Return-path: <linux-kernel-owner@vger.kernel.org>
-In-Reply-To: <20180719142844.u3u4p7tywb54y4yd@angband.pl>
+Content-Disposition: inline
+In-Reply-To: <nycvar.YSQ.7.76.1807182353560.2327@knanqh.ubzr>
 Sender: linux-kernel-owner@vger.kernel.org
 List-ID: <linux-console.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-To: Adam Borowski <kilobyte@angband.pl>
-Cc: One Thousand Gnomes <gnomes@lxorguk.ukuu.org.uk>, Greg KH <gregkh@linuxfoundation.org>, Jiri Slaby <jslaby@suse.com>, linux-console@vger.kernel.org, Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>, Linux Fbdev development list <linux-fbdev@vger.kernel.org>, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+To: Nicolas Pitre <nicolas.pitre@linaro.org>
+Cc: Adam Borowski <kilobyte@angband.pl>, Kees Cook <keescook@chromium.org>, Geert Uytterhoeven <geert@linux-m68k.org>, Dave Mielke <Dave@mielke.cc>, Samuel Thibault <samuel.thibault@ens-lyon.org>, linux-kernel@vger.kernel.org, linux-console@vger.kernel.org
 
-Hi Adam,
+On Thu, Jul 19, 2018 at 12:05:25AM -0400, Nicolas Pitre wrote:
+> 
+> The nr argument is typically small: most often nr == 1. However this
+> could be abused with a very large explicit scroll in a resized screen.
+> Make the code scroll lines by performing an array rotation operation to
+> avoid the need for a large temporary space.
+> 
+> Requested-by: Kees Cook <keescook@chromium.org>
+> Suggested-by: Adam Borowski <kilobyte@angband.pl>
+> Signed-off-by: Nicolas Pitre <nico@linaro.org>
 
-On Thu, Jul 19, 2018 at 4:29 PM Adam Borowski <kilobyte@angband.pl> wrote:
-> And vgacon has code that looks like it can do CGA and MDA (redundant with
-> mdacon?), either of which I haven't used in... quite a while.  Might be
-> tricky getting access to such hardware to test...
+I've now applied this v2 of the patch, thanks for this.
 
-Mdacon is meant to be used next to vgacon, for systems with both color and
-monochrome graphics adapters.
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+greg k-h
