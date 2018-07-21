@@ -1,35 +1,52 @@
 From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH v2 1/3] vt: avoid a VLA in the unicode screen scroll
- function
-Date: Sat, 21 Jul 2018 09:20:43 +0200
-Message-ID: <20180721072043.GA26449@kroah.com>
-References: <20180718010242.5254-1-nicolas.pitre@linaro.org>
- <20180718010242.5254-2-nicolas.pitre@linaro.org>
- <20180718014813.ygcbgqxk4yo3ydbl@angband.pl>
- <nycvar.YSQ.7.76.1807172155070.11681@knanqh.ubzr>
- <nycvar.YSQ.7.76.1807182353560.2327@knanqh.ubzr>
+Subject: Re: [PATCH 0/6] vt: no blinking on console, 256/24-bit color
+ improvements
+Date: Sat, 21 Jul 2018 09:43:19 +0200
+Message-ID: <20180721074319.GA30454@kroah.com>
+References: <20180718030152.kdq53mwpdfusvwl5@angband.pl>
 Mime-Version: 1.0
 Return-path: <linux-kernel-owner@vger.kernel.org>
 Content-Disposition: inline
-In-Reply-To: <nycvar.YSQ.7.76.1807182353560.2327@knanqh.ubzr>
+In-Reply-To: <20180718030152.kdq53mwpdfusvwl5@angband.pl>
 Sender: linux-kernel-owner@vger.kernel.org
 List-ID: <linux-console.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-To: Nicolas Pitre <nicolas.pitre@linaro.org>
-Cc: Adam Borowski <kilobyte@angband.pl>, Kees Cook <keescook@chromium.org>, Geert Uytterhoeven <geert@linux-m68k.org>, Dave Mielke <Dave@mielke.cc>, Samuel Thibault <samuel.thibault@ens-lyon.org>, linux-kernel@vger.kernel.org, linux-console@vger.kernel.org
+To: Adam Borowski <kilobyte@angband.pl>
+Cc: Jiri Slaby <jslaby@suse.com>, linux-console@vger.kernel.org, Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>, linux-fbdev@vger.kernel.org, linux-kernel@vger.kernel.org
 
-On Thu, Jul 19, 2018 at 12:05:25AM -0400, Nicolas Pitre wrote:
+On Wed, Jul 18, 2018 at 05:01:52AM +0200, Adam Borowski wrote:
+> Hi!
+> Here's a patchset with two entangled improvements:
 > 
-> The nr argument is typically small: most often nr == 1. However this
-> could be abused with a very large explicit scroll in a resized screen.
-> Make the code scroll lines by performing an array rotation operation to
-> avoid the need for a large temporary space.
+> * it'd be good to get rid of blinking where possible.  Even CGA (thus VGA)
+>   allows disabling it, rendering such characters with a bright background
+>   instead.
+> * due to my error, 256-color mode uses a much darker palette for conversion,
+>   resulting in behaving inconsistently with 24-bit mode.
 > 
-> Requested-by: Kees Cook <keescook@chromium.org>
-> Suggested-by: Adam Borowski <kilobyte@angband.pl>
-> Signed-off-by: Nicolas Pitre <nico@linaro.org>
+> The new code uses bright backgrounds when possible, enabled with \e[100m or
+> \e[48;m.
+> 
+> Despite the whole idea following a VGA capability, this patchset doesn't
+> change vgacon yet, just fbcon.  The reason being: ~80% of x86 users have an
+> nVidia chip, which means nouveau or nvidia-proprietary.  Nouveau implies
+> fbcon, nvidia-proprietary fails to properly restore text flags (as evidenced
+> by 512 glyph mode turning to 256 on switch from graphics).  You don't care
+> about the proprietary driver, but let's not break it pointlessly, and as
+> both nVidia cards I own work only with nouveau, I don't want to touch what I
+> can't test.
+> 
+> Thus, let's enable unblinking on fbcon for now.  We can flip that bit (in
+> register 0x10) later.
+> 
+> This fixes the display of catimg and similar tools.
 
-I've now applied this v2 of the patch, thanks for this.
+I've applied the first patch, as it was obvious :)
+
+For the rest, can you make it a config option as Alan said?  And I
+agree, we don't care about breaking nvidia systems, go ahead :)
+
+thanks,
 
 greg k-h
