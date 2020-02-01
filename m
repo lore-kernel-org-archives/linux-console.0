@@ -1,68 +1,35 @@
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Subject: Re: [PATCH 0/6] vt: no blinking on console, 256/24-bit color improvements
-Date: Mon, 23 Jul 2018 13:07:27 +0200
-Message-ID: <CAMuHMdVPx40SL2kqv+nRUDoX0GL4uKoZd7gYmab94T2RyrpkMw@mail.gmail.com>
-References: <20180718030152.kdq53mwpdfusvwl5@angband.pl> <20180721074319.GA30454@kroah.com>
- <20180721213843.wkculy5cdrrbmuij@angband.pl> <CAMuHMdWvZnU_p-c98sag8t1BCaBLSqZmiH88sgD2kACbvax0pA@mail.gmail.com>
- <20180723104151.z3lasjmdd3ubh2sc@angband.pl>
+From: crocket <crockabiscuit@gmail.com>
+Subject: us.map from kbd maps Right Alt to AltGr and Shift+Tab to Alt+Tab.
+Date: Sat, 1 Feb 2020 09:21:41 +0900
+Message-ID: <CAL0=0H3WQBWjvFqukfb+S6M9C3eeiKkOGSxGwPCmfmH02XJO=w@mail.gmail.com>
 Mime-Version: 1.0
-Return-path: <linux-kernel-owner@vger.kernel.org>
-In-Reply-To: <20180723104151.z3lasjmdd3ubh2sc@angband.pl>
-Sender: linux-kernel-owner@vger.kernel.org
+Return-path: <linux-console-owner@vger.kernel.org>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=Udfi63YfCrtAr7scyz/PAaRY9UA5vKGyv2EMHZxkkNQ=;
+        b=cXh3pk+YWZN+MREPZgAGgix9BRWXLbyJ5pSeZROjudlk/uXuAAOfGlHx7qOR2aBEzl
+         mewZit+BTR8GlUPja8wWgz0AXR5MzGwVH8P3zeZRF9YepeIUlWcGLY+vY4nNUXA74iSb
+         PP7OfnFS7R2Z2lbUklG0DajTD+Ujf3qEmbfwWlUSeac4DosmTgOL+mAHmiSCuNfMddpo
+         CQ543HttDRlxqx3q2bRTXuSomDaa3oaItRq7KTON++ZGIvGX3u2PjGFX2fgaRz+yY9UO
+         jzuOC2n2sEHGKk5PJXFRXPSFDX8nL9G0ZuIPFCBk//BYpCbiG5cg7MRZlcXCBtoS3NFZ
+         V71g==
+Sender: linux-console-owner@vger.kernel.org
 List-ID: <linux-console.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-To: Adam Borowski <kilobyte@angband.pl>
-Cc: Greg KH <gregkh@linuxfoundation.org>, Jiri Slaby <jslaby@suse.com>, linux-console@vger.kernel.org, Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>, Linux Fbdev development list <linux-fbdev@vger.kernel.org>, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+To: linux-console@vger.kernel.org
 
-Hi Adam,
+* I have never seen a modern US layout keyboard that has AltGr at the
+position of Right Alt. Also, using emacs ergonomically requires using
+two alt keys. Sometimes, I use emacs on linux console.
+* In us.map, Shift+Tab is mapped to Alt+Tab. I see no good reason to
+map Shift+Tab to Alt+Tab unless the keymap was neglected after someone
+tested it with an esoteric keyboard or in an esoteric environment.
 
-On Mon, Jul 23, 2018 at 12:42 PM Adam Borowski <kilobyte@angband.pl> wrote:
-> On Mon, Jul 23, 2018 at 10:53:29AM +0200, Geert Uytterhoeven wrote:
-> > On Sat, Jul 21, 2018 at 11:39 PM Adam Borowski <kilobyte@angband.pl> wrote:
-> > > Technically, every console can be made to blink by drawing/clearing affected
-> > > characters a few times per second, but that'd be quite a waste of coding
-> > > time and kernel size.  There's a reason browsers dropped support for <blink>
-> > > and text-decoration:blink.
-> >
-> > It's very simple and fast to implement in fbcon for FB_TYPE_PLANES or
-> > FB_TYPE_INTERLEAVED_PLANES and FB_VISUAL_PSEUDOCOLOR ;-)
->
-> Interesting...  I'm still not going to do the effort to implement that
-> (which would require learning fbdev internals first), though.  But while I
-> dislike this feature, someone else might want it.
->
-> The main problem here is that there are only 8 or 7 bits available for
-> attributes, thus it's better to use them for something more useful.  And
-> here, fbcon already interprets this bit as bright background, thus this
-> patchset makes vt use it instead of non-existant blink.
+For now, I use my own keymap that inherits us.map and
+linux-with-two-alt-keys and maps shift+tab to shift+tab and alt+tab to
+alt+tab.
 
-Even better that they are mutually exclusive ;-)  So it can work fine with
-only 4 bitplanes.
-
-That means bitplane 3 means either bright background (palette[8..15] are
-the extra-bright versions of palette[0..7]) or blinking (palette[8..15]
-alternate between palette[0..7] and all zeroes).
-
-> There'll be more bits available once attributes get migrated into uniscr --
-> either 11 or 32 bits depending on chosen implementation.  But I still
-> wouldn't go too wild with them: the console is meant for recovery tasks as
-> on any properly working system you can have an X terminal configured for
-> pixel-to-pixel identical behaviour as anything console can do.  Thus, only
-> cheap improvements to attributes make sense.  This patchset is currently at
-> +3 net lines, this certainly counts as cheap.
-
-Assumed all those systems are sufficiently powerful to still run X
-(said the guy who once ran X with mem=2M on his Amiga, just to prove it could
- work ;-)
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+I propose mapping Right Alt to Alt and Shift+Tab to Shift+Tab in
+us.map or a modern variant of us.map.
